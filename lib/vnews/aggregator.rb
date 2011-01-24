@@ -47,11 +47,13 @@ class Vnews
         :feed_url => feed.url, 
         :original_feed_url => feed_url,
         '_id' => feed_url,
+        'type' => "feed",
         :etag => feed.etag, 
         :last_modified => feed.last_modified,
         :entries => feed.entries.map {|entry|
           {:title => entry.title.sanitize,
             '_id' => entry.url,
+            'type' => "entry",
             :url => entry.url,
             :author => entry.author,
             :summary => entry.summary,
