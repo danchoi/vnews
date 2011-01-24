@@ -12,6 +12,10 @@ class Vnews
       @logger = Logger.new(config[:logfile] || STDERR)
     end
 
+    def list_feeds(keys={})
+      Couch.show_view("feeds_with_entries", keys)
+    end
+
     def subscribe(url)
       feed = get_feed(url)
       # store in couchdb
@@ -44,8 +48,8 @@ class Vnews
       { 
         :title => feed.title,
         # It's very importannt that this is feed_url and not feed.url:
-        :feed_url => feed.url, 
-        :original_feed_url => feed_url,
+        :link => feed.url, 
+        :feed_url => feed_url,
         '_id' => feed_url,
         'type' => "feed",
         :etag => feed.etag, 
@@ -54,6 +58,7 @@ class Vnews
           {:title => entry.title.sanitize,
             '_id' => entry.url,
             'type' => "feed_entry",
+            'feed_id' => feed_url,
             :url => entry.url,
             :author => entry.author,
             :summary => entry.summary,

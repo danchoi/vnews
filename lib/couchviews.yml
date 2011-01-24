@@ -11,8 +11,8 @@ views:
     map: |
       function(doc) {
         if (doc.type == 'feed') {
-          emit([doc._id, 0, doc.title], null);
+          emit([doc._id, 0, doc.last_modified, doc.title], null);
         } else if (doc.type == 'feed_entry') {
-          emit([doc.feed_id, doc.published, doc.title], null);
+          emit([doc.feed_id, 1, doc.published, doc.title], null);
         }
       }

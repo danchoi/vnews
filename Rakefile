@@ -1,15 +1,15 @@
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
+require 'couchrest'
+require 'yaml'
+require 'json'
+require 'vnews'
 require 'rake'
 require 'rake/testtask'
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
-
 desc "Save couchdb views in lib/couchviews.yml"
 task :create_views do
-  require 'couchrest'
-  require 'yaml'
-  require 'json'
   db = CouchRest.database! "http://localhost:5984/vnews"
   views = YAML::load File.read("lib/couchviews.yml")
   begin
@@ -18,6 +18,12 @@ task :create_views do
   rescue RestClient::ResourceNotFound
     puts db.save_doc(views)
   end
+end
+
+desc "List feeds with recent entry titles" 
+task :list_feeds do
+  vnews = Vnews::Aggregator.new  
+  puts vnews.list_feeds.inspect
 end
 
 desc "Run tests"
