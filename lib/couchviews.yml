@@ -1,0 +1,63 @@
+_id: _design/events
+views: 
+  test:
+    map: |
+      function(doc) {
+        for (var i in doc.event_nodes) {
+          emit(doc.event_nodes[i]['text'], null)
+        }
+      }
+  venues:
+    map: |
+      function(doc) {
+        var events = [];
+        for (var i in doc.event_nodes) {
+          events[i] = doc.event_nodes[i]['text'];
+        }
+        emit((doc.title || doc._id), events);
+      }
+  venues_full:
+    map: |
+      function(doc) {
+        var events = [];
+        for (var i in doc.event_nodes) {
+          events[i] = doc.event_nodes[i];
+        }
+        emit(doc._id, events);
+      }
+  venues_medium:
+    map: |
+      function(doc) {
+        var events = [];
+        for (var i in doc.event_nodes) {
+          var dict = doc.event_nodes[i];
+          delete dict.html;
+          events[i] = dict;
+        }
+        emit(doc._id, events);
+      }
+
+  venues_titles:
+    map: |
+      function(doc) {
+        var events = [];
+        for (var i in doc.event_nodes) {
+          var dict = doc.event_nodes[i];
+          events[i] = dict.extracted.title;
+        }
+        emit(doc._id, events);
+      }
+
+  venues_extracted:
+    map: |
+      function(doc) {
+        var events = [];
+        for (var i in doc.event_nodes) {
+          var dict = doc.event_nodes[i];
+          events[i] = dict.extracted;
+        }
+        emit(doc._id, events);
+      }
+
+
+
