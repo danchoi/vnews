@@ -1,63 +1,18 @@
-_id: _design/events
+_id: _design/vnews
 views: 
-  test:
+  feeds:
     map: |
       function(doc) {
-        for (var i in doc.event_nodes) {
-          emit(doc.event_nodes[i]['text'], null)
+        if (doc.type == 'feed') {
+          emit((doc.title || doc._id), null);
         }
       }
-  venues:
+  feeds_with_entries:
     map: |
       function(doc) {
-        var events = [];
-        for (var i in doc.event_nodes) {
-          events[i] = doc.event_nodes[i]['text'];
+        if (doc.type == 'feed') {
+          emit([doc._id, 0, doc.title], null);
+        } else if (doc.type == 'feed_entry') {
+          emit([doc.feed_id, doc.published, doc.title], null);
         }
-        emit((doc.title || doc._id), events);
       }
-  venues_full:
-    map: |
-      function(doc) {
-        var events = [];
-        for (var i in doc.event_nodes) {
-          events[i] = doc.event_nodes[i];
-        }
-        emit(doc._id, events);
-      }
-  venues_medium:
-    map: |
-      function(doc) {
-        var events = [];
-        for (var i in doc.event_nodes) {
-          var dict = doc.event_nodes[i];
-          delete dict.html;
-          events[i] = dict;
-        }
-        emit(doc._id, events);
-      }
-
-  venues_titles:
-    map: |
-      function(doc) {
-        var events = [];
-        for (var i in doc.event_nodes) {
-          var dict = doc.event_nodes[i];
-          events[i] = dict.extracted.title;
-        }
-        emit(doc._id, events);
-      }
-
-  venues_extracted:
-    map: |
-      function(doc) {
-        var events = [];
-        for (var i in doc.event_nodes) {
-          var dict = doc.event_nodes[i];
-          events[i] = dict.extracted;
-        }
-        emit(doc._id, events);
-      }
-
-
-

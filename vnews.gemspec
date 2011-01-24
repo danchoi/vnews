@@ -4,7 +4,7 @@ require "vnews/version"
 
 Gem::Specification.new do |s|
   s.name        = "vnews"
-  s.version     = Vmail::VERSION
+  s.version     = Vnews::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Daniel Choi"]
   s.email       = ["dhchoi@gmail.com"]
