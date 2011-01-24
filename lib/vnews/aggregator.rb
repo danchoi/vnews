@@ -4,11 +4,23 @@ require 'open-uri'
 require 'feedzirra'
 require 'logger'
 require 'yaml'
+require 'vnews/couch'
 
 class Vnews
   class Aggregator
     def initialize(config={})
       @logger = Logger.new(config[:logfile] || STDERR)
+    end
+
+    def subscribe(url)
+      feed = get_feed(url)
+      # store in couchdb
+      entries = feed.delete(:entries)
+      feeddoc = Couch.create_or_update(feed)
+      entries.each do |entry|
+        Couch.create_or_update(entry)
+      end
+      feeddoc
     end
 
     def get_feed(feed_url)
@@ -34,10 +46,12 @@ class Vnews
         # It's very importannt that this is feed_url and not feed.url:
         :feed_url => feed.url, 
         :original_feed_url => feed_url,
+        '_id' => feed_url,
         :etag => feed.etag, 
         :last_modified => feed.last_modified,
         :entries => feed.entries.map {|entry|
           {:title => entry.title.sanitize,
+            '_id' => entry.url,
             :url => entry.url,
             :author => entry.author,
             :summary => entry.summary,
@@ -66,6 +80,7 @@ class Vnews
       feed_urls = doc.elements.map('//outline[@xmlUrl]') do |e|
         e.attributes['xmlUrl']
       end.uniq.each do |url|
+        # TODO
         subscribe(url)
       end
     end
@@ -92,7 +107,6 @@ end
 
 if __FILE__ == $0
   vnews = Vnews::Aggregator.new
-  res = vnews.get_feed ARGV.first
-  puts res.to_yaml
+  res = vnews.subscribe ARGV.first
 end
 
