@@ -40,7 +40,7 @@ class Vnews
     end
 
     def feed_to_hash(feed_url, feed)
-      #feed.sanitze_entries! 
+      #feed.sanitze_entries!  # doesn't work on recent versions of Feedzirra for some reason
       { 
         :title => feed.title,
         # It's very importannt that this is feed_url and not feed.url:
@@ -53,7 +53,7 @@ class Vnews
         :entries => feed.entries.map {|entry|
           {:title => entry.title.sanitize,
             '_id' => entry.url,
-            'type' => "entry",
+            'type' => "feed_entry",
             :url => entry.url,
             :author => entry.author,
             :summary => entry.summary,
