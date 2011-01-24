@@ -3,9 +3,7 @@ require 'vnews/aggregator'
 require 'logger'
 require 'drb'
 
-
 class Vnews
-  
   class << self
 
     # starts the drb outline_server

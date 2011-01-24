@@ -74,7 +74,7 @@ class Vnews
       unless feed_url =~ /^http:\/\//
         feed_url = "http://" + feed_url
       end
-      feed_url
+      feed_url.strip
     end
 
     def log(text)
