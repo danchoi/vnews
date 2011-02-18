@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'feed_yamlizer'
 require 'vnews/autodiscoverer'
+require 'vnews/sql'
 
 class Vnews
   class Aggregator
@@ -10,6 +11,7 @@ class Vnews
 
     def initialize(out=nil)
       @out = out
+      @sqlclient = Vnews::Sql.new
     end
 
     def get_feed(feed_url)
@@ -41,7 +43,7 @@ class Vnews
     # f is a hash; get from get_feed()
     def feed_to_s(f)
       out = []
-      f[:meta].each {|k, v| out << "# #{v}" }
+      f[:meta].select {|k,v| k != :xml_encoding}.each {|k, v| out << "# #{v}" }
       out << ''
       f[:items].each do |i|
         out << '-' * 10
@@ -64,11 +66,14 @@ class Vnews
     end
 
     # input is a hash
-    def print_feed(url)
+    def sync_feed(url)
       f = get_feed url
-      file = @out || munge_title(f[:meta][:title])
-      File.open(file, 'w') do |out|
-        out.puts feed_to_s(f)
+      @sqlclient.insert_feed(munge_title(f[:meta][:title]), f[:meta][:link])
+      f[:items].each do |item|
+        if item[:guid].nil? || item[:guid].strip == ''
+          item[:guid] = f[:meta][:link] + Time.now.to_i
+        end
+        @sqlclient.insert_item item.merge(:feed => f[:meta][:link], :feed_title => f[:meta][:title])
       end
     end
 
@@ -96,5 +101,5 @@ class Vnews
 end
 
 if __FILE__ == $0
-  Vnews::Aggregator.new.print_feed(ARGV.first)
+  Vnews::Aggregator.new.sync_feed(ARGV.first)
 end
