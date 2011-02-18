@@ -9,8 +9,9 @@ class Vnews
   class Feed
     include Autodiscoverer
 
-    def initialize(out=nil)
-      @out = out
+    def initialize(url, folder)
+      @url = url
+      @folder = folder
       @sqlclient = Vnews::Sql.new
     end
 
@@ -39,10 +40,10 @@ class Vnews
 
 
     # input is a hash
-    def sync_feed(url)
-      f = get_feed url
+    def fetch
+      f = get_feed @url
       return unless f
-      @sqlclient.insert_feed(f[:meta][:title], f[:meta][:link])
+      @sqlclient.insert_feed(f[:meta][:title], f[:meta][:link], @folder)
       f[:items].each do |item|
         if item[:guid].nil? || item[:guid].strip == ''
           item[:guid] = f[:meta][:link] + Time.now.to_i
@@ -75,6 +76,6 @@ class Vnews
 end
 
 if __FILE__ == $0
-  Vnews::Aggregator.new.sync_feed(ARGV.first)
+  Vnews::Feed.new(ARGV.first, ARGV.last).fetch
 end
 

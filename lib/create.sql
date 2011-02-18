@@ -22,7 +22,7 @@ alter table items add index feed (feed(5));
 create table feeds_folders (
   feed varchar(255), /* the feed link */
   folder varchar(255) /* folder title */
-)
+) type=MyISAM;
 
 alter table feeds_folders add index folder (folder(5));
 

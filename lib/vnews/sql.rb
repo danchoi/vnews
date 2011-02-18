@@ -8,8 +8,12 @@ class Vnews
     end
 
     # TODO folder; can be null
-    def insert_feed(title, link)
+    def insert_feed(title, link, folder=nil)
       @client.query "INSERT IGNORE INTO feeds (title, link) VALUES ('#{e title}', '#{e link}')"
+      if folder
+        @client.query "INSERT IGNORE INTO feeds_folders (feed, folder) VALUES ('#{e link}', '#{e folder}')"
+      end
+
     end
 
     def insert_item(item)
