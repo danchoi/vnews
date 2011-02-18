@@ -7,7 +7,9 @@ require 'vnews/autodiscoverer'
 class Vnews
   class Aggregator
     include Autodiscoverer
-    def initialize(config={})
+
+    def initialize(out=nil)
+      @out = out
     end
 
     def get_feed(feed_url)
@@ -15,8 +17,8 @@ class Vnews
       response = open(feed_url)
       xml = response.read
       # puts response.last_modified
-      puts response.content_type
-      puts response.charset
+      $stderr.puts response.content_type
+      $stderr.puts response.charset
       charset = response.charset || "ISO-8859-1"
 
       if response.content_type !~ /xml/
@@ -28,28 +30,46 @@ class Vnews
           nil
         end
       end
-      puts "Running"
+      $stderr.puts "Running"
       feed_yaml = FeedYamlizer.run(xml, charset)
+    end
+
+    def munge_title(title)
+      title.gsub(/\W/, '-') + '.txt'
+    end
+
+    # f is a hash; get from get_feed()
+    def feed_to_s(f)
+      out = []
+      f[:meta].each {|k, v| out << "# #{v}" }
+      out << ''
+      f[:items].each do |i|
+        out << '-' * 10
+        out << ''
+        out << i[:title]
+        out << ''
+        header = []
+        header << i[:pub_date].strftime("%b %d")
+        if i[:author]
+          header << "By #{i[:author]}"
+        end
+        out << header.map {|x| "    " + x.to_s}.join("\n\n")
+        out << ''
+        out << i[:content][:text].strip.gsub(/^/, "    ") # indent body 4 spaces
+        out << ''
+        out << "    #{i[:link]}"
+        out << ''
+      end
+      out.join("\n")
     end
 
     # input is a hash
     def print_feed(url)
       f = get_feed url
-      f[:items].each {|i|
-        puts '-' * 80
-        puts i[:title]
-        puts
-        header = []
-        header << i[:link]
-        header << i[:pub_date].strftime("%b %d")
-        if i[:author]
-          header << "By #{i[:author]}"
-        end
-        puts header.map {|x| "    " + x.to_s}.join("\n\n")
-        puts
-        puts i[:content][:text].strip.gsub(/^/, "    ") # indent body 4 spaces
-        puts
-      }
+      file = @out || munge_title(f[:meta][:title])
+      File.open(file, 'w') do |out|
+        out.puts feed_to_s(f)
+      end
     end
 
     def import_opml(opml)
@@ -70,11 +90,8 @@ class Vnews
     end
 
     def log(text)
-      $stderr.puts text
+      stderr.puts text
     end
-
-
-
   end
 end
 

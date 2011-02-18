@@ -1,0 +1,19 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    feed_yamlizer (0.0.2)
+      htmlentities
+      nokogiri
+      sqlite3-ruby
+    htmlentities (4.2.4)
+    nokogiri (1.4.4)
+    sqlite3 (1.3.3)
+    sqlite3-ruby (1.3.3)
+      sqlite3 (>= 1.3.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  feed_yamlizer
+  nokogiri
