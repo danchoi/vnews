@@ -37,8 +37,15 @@ class Vnews
 
     def feeds(folder)
       condition = folder.nil? ? "ff.feed IS NULL" : "ff.folder = '#{e folder}'"
-      puts folder
-      @client.query("SELECT * from feeds left join feeds_folders ff on (ff.feed = feeds.link) where #{condition} order by feeds.title") 
+      @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) where #{condition} order by feeds.title") 
+    end
+
+    def items(feed) # feed is xml URL
+      if feed
+        @client.query("SELECT items.title, pub_date from items where items.feed = '#{e feed}' order by pub_date desc") 
+      else
+        @client.query("SELECT items.title, pub_date from items order by pub_date desc") 
+      end
     end
 
     # escape

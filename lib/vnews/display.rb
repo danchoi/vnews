@@ -22,7 +22,10 @@ class Vnews
     end
 
     # returns items as a list, most recent first
-    def items(feed)
+    def items(feed=nil)
+      @sqliteclient.items(feed).map do |x|
+        x.inspect
+      end
     end
 
   end
