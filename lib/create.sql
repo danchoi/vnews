@@ -6,7 +6,7 @@ create table feeds (
 
 create table items (
   guid varchar(255),
-  feed varchar(255),
+  feed varchar(255), /* feed link is the foreign key */
   feed_title varchar(255), /*denorm a little*/
   title varchar(255),
   link varchar(255),

@@ -1,5 +1,5 @@
 require 'vnews/version'
-require 'vnews/aggregator'
+require 'vnews/feed'
 require 'logger'
 require 'drb'
 
