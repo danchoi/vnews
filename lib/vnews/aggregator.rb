@@ -1,85 +1,55 @@
 require 'rexml/document'
 require 'nokogiri'
 require 'open-uri'
-require 'feedzirra'
-require 'logger'
-require 'yaml'
-require 'vnews/couch'
+require 'feed_yamlizer'
+require 'vnews/autodiscoverer'
 
 class Vnews
   class Aggregator
+    include Autodiscoverer
     def initialize(config={})
-      @logger = Logger.new(config[:logfile] || STDERR)
-    end
-
-    def list_feeds(keys={})
-      Couch.show_view("feeds_with_entries", keys)
-    end
-
-    def subscribe(url)
-      feed = get_feed(url)
-      # store in couchdb
-      entries = feed.delete(:entries)
-      feeddoc = Couch.create_or_update(feed)
-      entries.each do |entry|
-        Couch.create_or_update(entry)
-      end
-      feeddoc
     end
 
     def get_feed(feed_url)
       feed_url = repair feed_url
-      feed = Feedzirra::Feed.fetch_and_parse feed_url
-      if feed.nil?
+      response = open(feed_url)
+      xml = response.read
+      # puts response.last_modified
+      puts response.content_type
+      puts response.charset
+      charset = response.charset || "ISO-8859-1"
+
+      if response.content_type !~ /xml/
         log "Can't find feed at #{feed_url}\nAttempting autodiscovery"
         feed_url = auto_discover(feed_url)
-        if feed_url
-          puts "Subscribing to #{feed_url}"
-          feed = Feedzirra::Feed.fetch_and_parse feed_url
+        if feed_url 
+          return get_feed(feed_url)
         else
-          raise SubscribeFailed
+          nil
         end
       end
-      feed_to_hash(feed_url, feed)
+      puts "Running"
+      feed_yaml = FeedYamlizer.run(xml, charset)
     end
 
-    def feed_to_hash(feed_url, feed)
-      #feed.sanitze_entries!  # doesn't work on recent versions of Feedzirra for some reason
-      { 
-        :title => feed.title,
-        # It's very importannt that this is feed_url and not feed.url:
-        :link => feed.url, 
-        :feed_url => feed_url,
-        '_id' => feed_url,
-        'type' => "feed",
-        :etag => feed.etag, 
-        :last_modified => feed.last_modified,
-        :entries => feed.entries.map {|entry|
-          {:title => entry.title.sanitize,
-            '_id' => entry.url,
-            'type' => "feed_entry",
-            'feed_id' => feed_url,
-            :url => entry.url,
-            :author => entry.author,
-            :summary => entry.summary,
-            :content => entry.content,
-            :published => entry.published,
-            :categories => entry.categories }}
+    # input is a hash
+    def print_feed(url)
+      f = get_feed url
+      f[:items].each {|i|
+        puts '-' * 80
+        puts i[:title]
+        puts
+        header = []
+        header << i[:link]
+        header << i[:pub_date].strftime("%b %d")
+        if i[:author]
+          header << "By #{i[:author]}"
+        end
+        puts header.map {|x| "    " + x.to_s}.join("\n\n")
+        puts
+        puts i[:content][:text].strip.gsub(/^/, "    ") # indent body 4 spaces
+        puts
       }
-    end
-
-    def auto_discover(feed_url)
-      doc = Nokogiri::HTML.parse(fetch(feed_url))
-      feed_url = [ 'head link[@type=application/atom+xml]', 
-        'head link[@type=application/rss+xml]', 
-        "head link[@type=text/xml]"].detect do |path|
-          doc.at(path)
-        end
-      if feed_url
-        feed_url
-      else
-        raise AutodiscoveryFailed, "can't discover feed url at #{url}"
-      end
     end
 
     def import_opml(opml)
@@ -88,7 +58,7 @@ class Vnews
         e.attributes['xmlUrl']
       end.uniq.each do |url|
         # TODO
-        subscribe(url)
+    
       end
     end
    
@@ -100,20 +70,14 @@ class Vnews
     end
 
     def log(text)
-      @logger.debug text
+      $stderr.puts text
     end
 
-    def self.start_drb_server(config)
-      outline = self.new(config)
-      use_uri = config['drb_uri'] || nil # redundant but explicit
-      DRb.start_service(use_uri, outline)
-      DRb.uri
-    end
+
+
   end
 end
 
 if __FILE__ == $0
-  vnews = Vnews::Aggregator.new
-  res = vnews.subscribe ARGV.first
+  Vnews::Aggregator.new.print_feed(ARGV.first)
 end
-
