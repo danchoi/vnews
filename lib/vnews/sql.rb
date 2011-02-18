@@ -14,7 +14,7 @@ class Vnews
     def insert_item(item)
       @client.query "DELETE from items WHERE guid = '#{item[:guid]}'"
 
-      @client.query "INSERT IGNORE INTO items (guid, feed, feed_title, title, link, pub_date, author, text) 
+      @client.query "INSERT IGNORE INTO items (guid, feed, feed_title, title, link, pub_date, author, text, word_count) 
         VALUES (
         '#{e item[:guid]}', 
         '#{e item[:feed]}', 
@@ -23,7 +23,8 @@ class Vnews
         '#{e item[:link]}', 
         '#{item[:pub_date]}',  
         '#{e item[:author]}',  
-        '#{e item[:content][:text]}'
+        '#{e item[:content][:text]}',
+        '#{item[:content][:text].scan(/\S+/).size}'
         )"
     end
 

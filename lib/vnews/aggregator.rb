@@ -95,7 +95,7 @@ class Vnews
     end
 
     def log(text)
-      stderr.puts text
+      $stderr.puts text
     end
   end
 end

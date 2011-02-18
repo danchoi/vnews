@@ -13,6 +13,7 @@ create table items (
   pub_date datetime,
   author varchar(255),
   text text,
+  word_count int unsigned,
   primary key (guid)
 ) type=MyISAM;
 
