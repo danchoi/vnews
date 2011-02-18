@@ -39,8 +39,6 @@ class Vnews
       def get(feed_url)
         DB.get feed_url
       end
-   
-
 
       def show_view(view, keys={})
         DB.view("vnews/#{view}")
