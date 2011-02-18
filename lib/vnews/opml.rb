@@ -17,7 +17,7 @@ class Vnews
     
       doc.xpath('/opml/body/outline').each do |n|
         if n.attributes['xmlUrl']
-          # import_feed n
+          import_feed n
         else
           folder = n.attributes["title"].to_s
           $stderr.puts "folder: #{folder}"

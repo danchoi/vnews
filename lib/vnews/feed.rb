@@ -48,7 +48,7 @@ class Vnews
       @sqlclient.insert_feed(f[:meta][:title], f[:meta][:link], @folder)
       f[:items].each do |item|
         if item[:guid].nil? || item[:guid].strip == ''
-          item[:guid] = [f[:meta][:link], Time.now.to_i].join("@@@")
+          item[:guid] = [f[:meta][:link], f[:link]].join(":::")
         end
         @sqlclient.insert_item item.merge(:feed => f[:meta][:link], :feed_title => f[:meta][:title])
       end

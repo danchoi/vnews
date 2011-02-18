@@ -17,7 +17,7 @@ class Vnews
 
     def insert_item(item)
       # not sure if this is efficient
-      @client.query "DELETE from items WHERE guid = '#{e item[:guid]}'"
+      @client.query "DELETE from items WHERE guid = '#{e item[:guid]}' and feed = '#{e item[:feed_title]}'"
       @client.query "INSERT IGNORE INTO items (guid, feed, feed_title, title, link, pub_date, author, text, word_count) 
         VALUES (
         '#{e item[:guid]}', 

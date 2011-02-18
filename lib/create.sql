@@ -14,7 +14,7 @@ create table items (
   author varchar(255),
   text text,
   word_count int unsigned,
-  primary key (guid)
+  primary key (feed,guid)
 ) type=MyISAM;
 
 alter table items add index feed (feed(5));
