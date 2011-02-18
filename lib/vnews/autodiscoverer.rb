@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 class Vnews
   class AutodiscoveryFailed < StandardError;  end
 

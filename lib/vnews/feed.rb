@@ -1,5 +1,3 @@
-require 'rexml/document'
-require 'nokogiri'
 require 'open-uri'
 require 'feed_yamlizer'
 require 'vnews/autodiscoverer'
@@ -52,16 +50,6 @@ class Vnews
       end
     end
 
-    def import_opml(opml)
-      doc = REXML::Document.new(opml) 
-      feed_urls = doc.elements.map('//outline[@xmlUrl]') do |e|
-        e.attributes['xmlUrl']
-      end.uniq.each do |url|
-        # TODO
-    
-      end
-    end
-   
     def repair(feed_url)
       unless feed_url =~ /^http:\/\//
         feed_url = "http://" + feed_url
