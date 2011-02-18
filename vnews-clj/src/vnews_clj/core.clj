@@ -1,5 +1,6 @@
 (ns vnews-clj.core
-  (:use [feedparser-clj.core :only [parse-feed]])
+  (:use [feedparser-clj.core :only [parse-feed]]
+        [vnews-clj.sql])
   (:require [clojure.contrib.string :as string]))
 
 ; test fetching feeds
@@ -21,5 +22,4 @@
 ; (map (fn [e] (:title e))  (:entries f))
 
 ; make another namespace for persistence?
-
 
