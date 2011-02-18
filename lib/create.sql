@@ -25,6 +25,5 @@ create table feeds_folders (
   unique key (feed, folder)
 ) type=MyISAM;
 
-/* ensure feed,folder is unique */
 alter table feeds_folders add index folder (folder(5));
 

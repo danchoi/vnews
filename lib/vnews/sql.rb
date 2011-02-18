@@ -17,7 +17,7 @@ class Vnews
 
     def insert_item(item)
       # not sure if this is efficient
-      @client.query "DELETE from items WHERE guid = '#{item[:guid]}'"
+      @client.query "DELETE from items WHERE guid = '#{e item[:guid]}'"
       @client.query "INSERT IGNORE INTO items (guid, feed, feed_title, title, link, pub_date, author, text, word_count) 
         VALUES (
         '#{e item[:guid]}', 
@@ -38,4 +38,6 @@ class Vnews
       @client.escape(value)
     end
   end
+
+  SQLCLIENT = Sql.new() # inject config here
 end

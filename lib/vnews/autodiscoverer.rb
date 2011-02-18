@@ -5,7 +5,8 @@ class Vnews
 
   module Autodiscoverer
     def auto_discover(feed_url)
-      doc = Nokogiri::HTML.parse(open(feed_url))
+      html = open(feed_url)
+      doc = Nokogiri::HTML.parse(html)
       feed_url = [ 'head link[@type=application/atom+xml]', 
         'head link[@type=application/rss+xml]', 
         "head link[@type=text/xml]"].detect do |path|
@@ -14,8 +15,10 @@ class Vnews
       if feed_url
         feed_url
       else
-        raise AutodiscoveryFailed, "can't discover feed url at #{url}"
+        nil
       end
+    rescue Errno::ECONNRESET, Nokogiri::CSS::SyntaxError
+      $stderr.puts $!
     end
   end
 end
