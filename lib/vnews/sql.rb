@@ -12,7 +12,6 @@ class Vnews
       if folder
         @client.query "INSERT IGNORE INTO feeds_folders (feed, folder) VALUES ('#{e link}', '#{e folder}')"
       end
-
     end
 
     def insert_item(item)
@@ -30,6 +29,16 @@ class Vnews
         '#{e item[:content][:text]}',
         '#{item[:content][:text].scan(/\S+/).size}'
         )"
+    end
+
+    def folders
+      @client.query("SELECT folder, count(*) as count from feeds_folders group by folder order by folder")
+    end
+
+    def feeds(folder)
+      condition = folder.nil? ? "ff.feed IS NULL" : "ff.folder = '#{e folder}'"
+      puts folder
+      @client.query("SELECT * from feeds left join feeds_folders ff on (ff.feed = feeds.link) where #{condition} order by feeds.title") 
     end
 
     # escape
