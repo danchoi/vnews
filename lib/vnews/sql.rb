@@ -7,13 +7,14 @@ class Vnews
       @client = Mysql2::Client.new @config
     end
 
+    # TODO folder; can be null
     def insert_feed(title, link)
       @client.query "INSERT IGNORE INTO feeds (title, link) VALUES ('#{e title}', '#{e link}')"
     end
 
     def insert_item(item)
+      # not sure if this is efficient
       @client.query "DELETE from items WHERE guid = '#{item[:guid]}'"
-
       @client.query "INSERT IGNORE INTO items (guid, feed, feed_title, title, link, pub_date, author, text, word_count) 
         VALUES (
         '#{e item[:guid]}', 
