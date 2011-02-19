@@ -148,6 +148,7 @@ func! s:list_folders()
   if len(folders) == 0
     echom "There are no folders."
   else
+    let s:selectiontype = "folder"
     call s:open_selection_window(folders, 'select-folder', "Select folder: ")
   end
 endfunc
@@ -157,6 +158,7 @@ func! s:list_feeds()
   if len(feeds) == 0
     echom "There are no feeds."
   else
+    let s:selectiontype = "feed"
     call s:open_selection_window(feeds, 'select-feed', "Select feed: ")
   end
 endfunc
@@ -164,10 +166,11 @@ endfunc
 " right now, just does folders
 function! s:fill_items(selection)
   " take different actions depending on whether a feed or folder?
-
   call s:focus_window(s:listbufnr)
   setlocal modifiable
-  let res = system(s:list_folder_items_command . shellescape(a:selection))
+  let command = s:selectiontype == "folder" ? s:list_folder_items_command : s:list_feed_items_command
+  let command .= shellescape(a:selection)
+  let res = system(command)
   silent! 1,$delete
   silent! put! =res
   silent normal Gdd
@@ -239,6 +242,7 @@ call s:create_list_window()
 call s:create_item_window()
 call s:focus_window(s:listbufnr) 
 
+let s:selectiontype = "folder"
 call s:fill_items("Main")
 
 

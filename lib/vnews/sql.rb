@@ -42,15 +42,16 @@ class Vnews
 
     def feeds(folder)
       condition = folder.nil? ? "" : "where ff.folder = '#{e folder}'"
-      @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) #{condition} order by feeds.title") 
+      @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) #{condition} order by feeds.title asc") 
     end
 
-    def feed_items(feed) # feed is xml URL
-      if feed
-        @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed = '#{e feed}' order by pub_date asc") 
-      else
-        @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items order by pub_date asc") 
+    def feed_items(feed_idx) 
+      f = @client.query("SELECT feed_url from feeds order by title asc limit 1 offset #{feed_idx}").first
+      if f.nil?
+        raise "no feed found for #{feed_idx}"
       end
+      feed_url = f["feed_url"]
+      @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed = '#{e feed_url}' order by pub_date asc") 
     end
 
     def folder_items(folder) 

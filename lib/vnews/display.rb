@@ -22,7 +22,7 @@ class Vnews
     # "link"=>"http://bits.blogs.nytimes.com/"}
     def feeds(folder=nil)
       @sqliteclient.feeds(folder).map.with_index do |x, idx|
-        [ idx, x['title'] ].join(" ")
+        [ x['title'] , idx ].join(" ")
       end
     end
 
@@ -58,8 +58,11 @@ class Vnews
       "%s %s %s %s %s" % [feed_title, title, word_count, date, guid]
     end
 
-    def feed_items(feed=nil)
-      @sqliteclient.feed_items(feed).map do |x|
+    # look up feed up idx
+    def feed_items(*feed_selection)
+      idx = feed_selection.join(' ')[/\d+$/, 0]
+      raise "Need an idx for feed #{feed_selection.inspect}: #{idx.inspect}" unless idx
+      @sqliteclient.feed_items(idx).map do |x|
         format_item_summary x
       end
     end
