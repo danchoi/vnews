@@ -47,9 +47,9 @@ class Vnews
 
     def items(feed) # feed is xml URL
       if feed
-        @client.query("SELECT items.title, feed, feed_title, pub_date from items where items.feed = '#{e feed}' order by pub_date desc") 
+        @client.query("SELECT items.title, guid, feed, feed_title, pub_date from items where items.feed = '#{e feed}' order by pub_date desc") 
       else
-        @client.query("SELECT items.title, feed, feed_title, pub_date from items order by pub_date desc") 
+        @client.query("SELECT items.title, guid, feed, feed_title, pub_date from items order by pub_date desc") 
       end
     end
 
