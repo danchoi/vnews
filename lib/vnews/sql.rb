@@ -60,8 +60,11 @@ class Vnews
       @client.query query
     end
 
+    def show_item(guid)
+      query = "SELECT items.* from items where guid = '#{e guid}'"
+      @client.query query
+    end
 
-    # escape
     def e(value)
       return unless value
       @client.escape(value)

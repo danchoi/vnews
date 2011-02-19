@@ -1,4 +1,5 @@
 require 'vnews/sql'
+require 'yaml'
 
 class Vnews
   class Display
@@ -36,11 +37,13 @@ class Vnews
       string[0,width].ljust(width)
     end
 
-    def format_item(i)
+    def format_item_summary(i)
       feed_title = col i['feed_title'], 20
       title = col(i['title'], 50)
       d = i['pub_date']
-      date_string = if d.year != Time.now.year
+      date_string = if d.nil?
+                      "no date"
+                    elsif d.year != Time.now.year
                       d.strftime("%b %Y")
                     else
                       d.strftime("%b %d")
@@ -52,7 +55,7 @@ class Vnews
 
     def feed_items(feed=nil)
       @sqliteclient.feed_items(feed).map do |x|
-        format_item x
+        format_item_summary x
       end
     end
 
@@ -60,10 +63,23 @@ class Vnews
       # strip off the count summary
       folder = folder.gsub(/\(\d+\)$/, '').strip
       @sqliteclient.folder_items(folder).map do |x|
-        format_item x
+        format_item_summary x
       end
     end
 
+    def format_item(item)
+      # TODO
+      item.to_yaml
+    end
+
+    def show_item(guid)
+      res = @sqliteclient.show_item(guid).first
+      if res
+        format_item(res)
+      else
+        "No item found"
+      end
+    end
 
   end
 end
