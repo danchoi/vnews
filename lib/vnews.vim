@@ -62,6 +62,7 @@ function! s:create_item_window()
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
   noremap <silent> <buffer> q :close<CR>
+  nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
   close
 endfunction
 
@@ -196,6 +197,17 @@ function! s:show_adjacent_item(up, focusbufname)
   call s:focus_window(bufnr(a:focusbufname))
   redraw
 endfunction
+
+func! s:close_item_window()
+  if winnr('$') > 1
+    close!
+  else
+    call s:focus_window(s:listbufnr)
+    wincmd p
+    close!
+    normal z-
+  endif
+endfunc
 
 
 call s:create_list_window()
