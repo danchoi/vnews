@@ -37,17 +37,21 @@ class Vnews
       string[0,width].ljust(width)
     end
 
+    def format_date(d)
+      if d.nil?
+        "no date"
+      elsif d.year != Time.now.year
+        d.strftime("%b %Y")
+      else
+        d.strftime("%b %d")
+      end 
+    end
+
     def format_item_summary(i)
       feed_title = col i['feed_title'], 20
       title = col(i['title'], 50)
       d = i['pub_date']
-      date_string = if d.nil?
-                      "no date"
-                    elsif d.year != Time.now.year
-                      d.strftime("%b %Y")
-                    else
-                      d.strftime("%b %d")
-                    end
+      date_string = format_date(d)
       date = col(date_string, 9)
       guid = i['guid']
       word_count = col i['word_count'].to_s, 6
@@ -69,8 +73,14 @@ class Vnews
     end
 
     def format_item(item)
-      # TODO
-      item.to_yaml
+      res = <<-END
+#{format_date item['pub_date']}, #{item['word_count']} words, #{item['feed_title']}, #{item['feed']}
+ 
+
+#{item['title']}#{item['author'] ? ("\n" + item['author']) : '' }  
+
+#{item['text']}
+      END
     end
 
     def show_item(guid)

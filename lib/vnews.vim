@@ -61,6 +61,7 @@ function! s:create_item_window()
   noremap <silent> <buffer> <cr> <C-W>=<C-W>p
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
+  noremap <silent> <buffer> q :close<CR>
   close
 endfunction
 
@@ -86,9 +87,8 @@ function! s:focus_window(target_bufnr)
 endfunction
 
 function! s:open_selection_window(selectionlist, buffer_name, prompt)
-  let s:return_to_winnr = winnr()
-  let s:return_to_bufname = bufname('')
   let s:selectionlist = a:selectionlist 
+  call s:focus_window(s:listbufnr)
   exec "leftabove split ".a:buffer_name
   setlocal completefunc=CompleteFunction
   setlocal buftype=nofile
@@ -130,7 +130,7 @@ endfun
 function! s:select_folder_or_feed()
   let folder_or_feed = s:trimString(get(split(getline(line('.')), ": "), 1) )
   close
-  exe s:return_to_winnr . "wincmd w"
+  call s:focus_window(s:listbufnr)
   if (folder_or_feed == '') " no selection
     return
   end
@@ -168,7 +168,7 @@ func! s:show_item_under_cursor(blank)
     return
   end
   echo s:guid
-  let res = system(s:show_item_command . s:guid)
+  let res = system(s:show_item_command . shellescape( s:guid))
   call s:focus_window(s:itembufnr)
   set modifiable
   silent 1,$delete
