@@ -7,7 +7,10 @@ class Vnews
       @client = Mysql2::Client.new @config
     end
 
-    def insert_feed(title, feed_url, link, folder=nil)
+    def insert_feed(title, feed_url, link, folder='main')
+      if folder.nil?
+        folder = 'main'
+      end
       @client.query "INSERT IGNORE INTO feeds (title, feed_url, link) VALUES ('#{e title}', '#{e feed_url}', '#{e link}')"
       if folder
         @client.query "INSERT IGNORE INTO feeds_folders (feed, folder) VALUES ('#{e link}', '#{e folder}')"
