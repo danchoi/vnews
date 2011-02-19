@@ -31,8 +31,6 @@ class Vnews
   end
 end
 
-
-
 if __FILE__ == $0
   puts Vnews::Display.new.send *ARGV
 end

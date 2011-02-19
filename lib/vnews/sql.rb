@@ -7,9 +7,9 @@ class Vnews
       @client = Mysql2::Client.new @config
     end
 
-    def insert_feed(title, feed_url, link, folder='main')
+    def insert_feed(title, feed_url, link, folder=nil)
       if folder.nil?
-        folder = 'main'
+        folder = 'Main'
       end
       @client.query "INSERT IGNORE INTO feeds (title, feed_url, link) VALUES ('#{e title}', '#{e feed_url}', '#{e link}')"
       if folder
@@ -34,12 +34,14 @@ class Vnews
         )"
     end
 
+    # queries:
+
     def folders
       @client.query("SELECT folder, count(*) as count from feeds_folders group by folder order by folder")
     end
 
     def feeds(folder)
-      condition = folder.nil? ? "ff.feed IS NULL" : "ff.folder = '#{e folder}'"
+      condition = folder.nil? ? "ff.folder = 'main'" : "ff.folder = '#{e folder}'"
       @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) where #{condition} order by feeds.title") 
     end
 
@@ -58,5 +60,5 @@ class Vnews
     end
   end
 
-  SQLCLIENT = Sql.new() # inject config here
+  SQLCLIENT = Sql.new() # TODO inject config here
 end
