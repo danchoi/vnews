@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+# for dev only; comment out for production
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+
+require 'vnews/display'
+
+puts Vnews::Display.new.send *ARGV
+
+

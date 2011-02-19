@@ -15,6 +15,10 @@ class Vnews
     end
 
     # returns feeds as a list, sorted alphabetically
+    # e.g.
+    # {"title"=>"Bits",
+    # "feed_url"=>"http://bits.blogs.nytimes.com/feed/",
+    # "link"=>"http://bits.blogs.nytimes.com/"}
     def feeds(folder=nil)
       @sqliteclient.feeds(folder).map do |x|
         x.inspect
@@ -22,7 +26,13 @@ class Vnews
     end
 
     # returns items as a list, most recent first
+    # e.g.
+    # {"title"=>"Episode 96: Git on Rails", "guid"=>"git-on-rails",
+    # "feed"=>"http://feeds.feedburner.com/railscasts",
+    # "feed_title"=>"Railscasts", "pub_date"=>2008-03-10 00:00:00 -0400,
+    # "word_count"=>41}
     def items(feed=nil)
+
       @sqliteclient.items(feed).map do |x|
         x.inspect
       end
