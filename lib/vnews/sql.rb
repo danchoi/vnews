@@ -57,7 +57,6 @@ class Vnews
       query = "SELECT items.title, items.guid, items.feed, items.feed_title, items.pub_date, items.word_count from items 
                     inner join feeds_folders ff on  ff.feed = items.feed
                     where ff.folder = '#{e folder}' order by pub_date desc"
-      puts query
       @client.query query
     end
 
