@@ -7,8 +7,8 @@ class Vnews
       @client = Mysql2::Client.new @config
     end
 
-    def insert_feed(title, link, folder=nil)
-      @client.query "INSERT IGNORE INTO feeds (title, link) VALUES ('#{e title}', '#{e link}')"
+    def insert_feed(title, feed_url, link, folder=nil)
+      @client.query "INSERT IGNORE INTO feeds (title, feed_url, link) VALUES ('#{e title}', '#{e feed_url}', '#{e link}')"
       if folder
         @client.query "INSERT IGNORE INTO feeds_folders (feed, folder) VALUES ('#{e link}', '#{e folder}')"
       end
@@ -42,9 +42,9 @@ class Vnews
 
     def items(feed) # feed is xml URL
       if feed
-        @client.query("SELECT items.title, pub_date from items where items.feed = '#{e feed}' order by pub_date desc") 
+        @client.query("SELECT items.title, feed, feed_title, pub_date from items where items.feed = '#{e feed}' order by pub_date desc") 
       else
-        @client.query("SELECT items.title, pub_date from items order by pub_date desc") 
+        @client.query("SELECT items.title, feed, feed_title, pub_date from items order by pub_date desc") 
       end
     end
 

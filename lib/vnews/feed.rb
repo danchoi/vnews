@@ -38,19 +38,20 @@ class Vnews
         end
       end
       feed_yaml = FeedYamlizer.run(xml, charset)
+      [feed_url, feed_yaml]
     rescue OpenURI::HTTPError, REXML::ParseException
       $stderr.puts "  #{$!} : #{$!.message}"
     end
 
     def fetch
-      f = get_feed @url
+      feed_url, f = get_feed @url
       return unless f
-      @sqlclient.insert_feed(f[:meta][:title], f[:meta][:link], @folder)
+      @sqlclient.insert_feed(f[:meta][:title], feed_url, f[:meta][:link], @folder)
       f[:items].each do |item|
         if item[:guid].nil? || item[:guid].strip == ''
           item[:guid] = [f[:meta][:link], f[:link]].join(":::")
         end
-        @sqlclient.insert_item item.merge(:feed => f[:meta][:link], :feed_title => f[:meta][:title])
+        @sqlclient.insert_item item.merge(:feed => feed_url, :feed_title => f[:meta][:title])
       end
     end
 
