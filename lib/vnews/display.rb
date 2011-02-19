@@ -21,8 +21,8 @@ class Vnews
     # "feed_url"=>"http://bits.blogs.nytimes.com/feed/",
     # "link"=>"http://bits.blogs.nytimes.com/"}
     def feeds(folder=nil)
-      @sqliteclient.feeds(folder).map do |x|
-        x.inspect
+      @sqliteclient.feeds(folder).map.with_index do |x, idx|
+        [ idx, x['title'] ].join(" ")
       end
     end
 

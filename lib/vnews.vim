@@ -52,6 +52,8 @@ function! s:create_list_window()
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
+  nnoremap <leader>m :call <SID>list_folders()<CR>
+  nnoremap <leader>M :call <SID>list_feeds()<CR>
 endfunction
 
 function! s:create_item_window() 
@@ -62,9 +64,10 @@ function! s:create_item_window()
   noremap <silent> <buffer> <cr> <C-W>=<C-W>p
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
-  noremap <silent> <buffer> q :close<CR>
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
+  nnoremap <leader>m :call <SID>list_folders()<CR>
+  nnoremap <leader>M :call <SID>list_feeds()<CR>
   close
 endfunction
 
@@ -149,6 +152,15 @@ func! s:list_folders()
   end
 endfunc
 
+func! s:list_feeds()
+  let feeds = split(system(s:list_feeds_command), "\n")
+  if len(feeds) == 0
+    echom "There are no feeds."
+  else
+    call s:open_selection_window(feeds, 'select-feed', "Select feed: ")
+  end
+endfunc
+
 " right now, just does folders
 function! s:fill_items(selection)
   " take different actions depending on whether a feed or folder?
@@ -229,5 +241,4 @@ call s:focus_window(s:listbufnr)
 
 call s:fill_items("Main")
 
-nnoremap <leader>m :call <SID>list_folders()<CR>
 

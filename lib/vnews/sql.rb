@@ -41,8 +41,8 @@ class Vnews
     end
 
     def feeds(folder)
-      condition = folder.nil? ? "ff.folder = 'main'" : "ff.folder = '#{e folder}'"
-      @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) where #{condition} order by feeds.title") 
+      condition = folder.nil? ? "" : "where ff.folder = '#{e folder}'"
+      @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) #{condition} order by feeds.title") 
     end
 
     def feed_items(feed) # feed is xml URL
