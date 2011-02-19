@@ -59,7 +59,7 @@ function! s:create_item_window()
   setlocal buftype=nofile
   let s:itembufnr = bufnr('%')
   
-  noremap <silent> <buffer> <cr> <C-W>p<CR> 
+  noremap <silent> <buffer> <cr> <C-W>=<C-W>p
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
 
