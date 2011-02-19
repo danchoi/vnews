@@ -157,7 +157,7 @@ function! s:fill_items(selection)
   silent! put! =res
   silent normal Gdd
   setlocal nomodifiable
-  normal z.
+  normal z-
 endfunction
 
 " blank arg is not used yet

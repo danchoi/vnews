@@ -50,7 +50,8 @@ class Vnews
                     end
       date = col(date_string, 9)
       guid = i['guid']
-      "%s %s %s %s" % [feed_title, title, date, guid]
+      word_count = col i['word_count'].to_s, 6
+      "%s %s %s %s %s" % [feed_title, title, word_count, date, guid]
     end
 
     def feed_items(feed=nil)
