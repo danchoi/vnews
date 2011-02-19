@@ -47,16 +47,16 @@ class Vnews
 
     def feed_items(feed) # feed is xml URL
       if feed
-        @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed = '#{e feed}' order by pub_date desc") 
+        @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed = '#{e feed}' order by pub_date asc") 
       else
-        @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items order by pub_date desc") 
+        @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items order by pub_date asc") 
       end
     end
 
     def folder_items(folder) 
       query = "SELECT items.title, items.guid, items.feed, items.feed_title, items.pub_date, items.word_count from items 
                     inner join feeds_folders ff on  ff.feed = items.feed
-                    where ff.folder = '#{e folder}' order by pub_date desc"
+                    where ff.folder = '#{e folder}' order by items.pub_date asc"
       @client.query query
     end
 

@@ -32,9 +32,27 @@ class Vnews
     # "feed_title"=>"Railscasts", "pub_date"=>2008-03-10 00:00:00 -0400,
     # "word_count"=>41}
 
+    def col(string, width)
+      string[0,width].ljust(width)
+    end
+
+    def format_item(i)
+      feed_title = col i['feed_title'], 20
+      title = col(i['title'], 50)
+      d = i['pub_date']
+      date_string = if d.year != Time.now.year
+                      d.strftime("%b %Y")
+                    else
+                      d.strftime("%b %d")
+                    end
+      date = col(date_string, 9)
+      guid = i['guid']
+      "%s %s %s %s" % [feed_title, title, date, guid]
+    end
+
     def feed_items(feed=nil)
       @sqliteclient.feed_items(feed).map do |x|
-        x.inspect
+        format_item x
       end
     end
 
@@ -42,7 +60,7 @@ class Vnews
       # strip off the count summary
       folder = folder.gsub(/\(\d+\)$/, '').strip
       @sqliteclient.folder_items(folder).map do |x|
-        x.inspect
+        format_item x
       end
     end
 
