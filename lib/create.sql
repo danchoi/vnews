@@ -2,7 +2,7 @@ create table feeds (
   title varchar(255),
   feed_url varchar(255),
   link varchar(255),
-  primary key (link)
+  primary key (feed_url)
 ) type=MyISAM;
 
 create table items (

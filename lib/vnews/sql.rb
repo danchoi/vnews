@@ -13,7 +13,7 @@ class Vnews
       end
       @client.query "INSERT IGNORE INTO feeds (title, feed_url, link) VALUES ('#{e title}', '#{e feed_url}', '#{e link}')"
       if folder
-        @client.query "INSERT IGNORE INTO feeds_folders (feed, folder) VALUES ('#{e link}', '#{e folder}')"
+        @client.query "INSERT IGNORE INTO feeds_folders (feed, folder) VALUES ('#{e feed_url}', '#{e folder}')"
       end
     end
 
@@ -45,13 +45,22 @@ class Vnews
       @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) where #{condition} order by feeds.title") 
     end
 
-    def items(feed) # feed is xml URL
+    def feed_items(feed) # feed is xml URL
       if feed
         @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed = '#{e feed}' order by pub_date desc") 
       else
         @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items order by pub_date desc") 
       end
     end
+
+    def folder_items(folder) 
+      query = "SELECT items.title, items.guid, items.feed, items.feed_title, items.pub_date, items.word_count from items 
+                    inner join feeds_folders ff on  ff.feed = items.feed
+                    where ff.folder = '#{e folder}' order by pub_date desc"
+      puts query
+      @client.query query
+    end
+
 
     # escape
     def e(value)

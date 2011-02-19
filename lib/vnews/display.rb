@@ -31,12 +31,21 @@ class Vnews
     # "feed"=>"http://feeds.feedburner.com/railscasts",
     # "feed_title"=>"Railscasts", "pub_date"=>2008-03-10 00:00:00 -0400,
     # "word_count"=>41}
-    def items(feed=nil)
 
-      @sqliteclient.items(feed).map do |x|
+    def feed_items(feed=nil)
+      @sqliteclient.feed_items(feed).map do |x|
         x.inspect
       end
     end
+
+    def folder_items(folder=nil)
+      # strip off the count summary
+      folder = folder.gsub(/\(\d+\)$/, '').strip
+      @sqliteclient.folder_items(folder).map do |x|
+        x.inspect
+      end
+    end
+
 
   end
 end

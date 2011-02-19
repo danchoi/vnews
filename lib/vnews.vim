@@ -11,20 +11,21 @@ let mapleader = ','
 
 "let s:client_script = 'vnews-client '
 let s:client_script = 'bin/vnews-client '
+
 let s:list_folders_command = s:client_script . 'folders '
 let s:list_feeds_command = s:client_script . 'feeds '
-let s:list_items_command = s:client_script . 'items ' 
+
+" can be items for a folder or a feed
+let s:list_folder_items_command = s:client_script . 'folder_items ' 
+let s:list_feed_items_command = s:client_script . 'feed_items ' 
 
 let s:set_window_width_command = s:client_script . "window_width= "
-
 
 let s:folder = "All"
 let s:feed = "All"
 function! VnewsStatusLine()
   return "%<%f\ " . s:folder . " " . s:feed . "%r%=%-14.(%l,%c%V%)\ %P"
 endfunction
-
-
 
 func! s:trimString(string)
   let string = substitute(a:string, '\s\+$', '', '')
@@ -128,14 +129,7 @@ function! s:select_item()
   if (item == '') " no selection
     return
   end
-  echo item
-  return
-	for item in s:matching_items
-	  if (item =~ item)
-      call s:load_item(item, 0)
-      break
-    end
-	endfor
+  call s:fill_items(item)
 endfunction
 
 func! s:list_folders()
@@ -147,10 +141,12 @@ func! s:list_folders()
   end
 endfunc
 
-function! s:fill_items(feed)
+function! s:fill_items(selection)
+  " take different actions depending on whether a feed or folder?
+
   call s:focus_window(s:listbufnr)
   setlocal modifiable
-  let res = system(s:list_items_command . shellescape(a:feed))
+  let res = system(s:list_folder_items_command . shellescape(a:selection))
   silent! 1,$delete
   silent! put! =res
   silent normal Gdd
