@@ -58,11 +58,9 @@ function! s:create_item_window()
   setlocal modifiable 
   setlocal buftype=nofile
   let s:itembufnr = bufnr('%')
-  
   noremap <silent> <buffer> <cr> <C-W>=<C-W>p
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
-
   close
 endfunction
 
@@ -136,7 +134,7 @@ function! s:select_folder_or_feed()
   if (folder_or_feed == '') " no selection
     return
   end
-  call s:fill_folder_or_feeds(folder_or_feed)
+  call s:fill_items(folder_or_feed)
 endfunction
 
 func! s:list_folders()
