@@ -51,6 +51,7 @@ function! s:create_list_window()
   noremap <silent> <buffer> <cr> :call <SID>show_item_under_cursor(0)<CR>
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
+  nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
 endfunction
 
 function! s:create_item_window() 
@@ -63,6 +64,7 @@ function! s:create_item_window()
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
   noremap <silent> <buffer> q :close<CR>
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
+  nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
   close
 endfunction
 
@@ -206,6 +208,17 @@ func! s:close_item_window()
     wincmd p
     close!
     normal z-
+  endif
+endfunc
+
+func! s:toggle_maximize_window()
+  if winnr('$') > 1
+    only
+  elseif bufwinnr(s:listbufnr) == winnr()
+    call s:show_item_under_cursor(1)
+  else " we're in the message window
+    call s:focus_window(s:listbufnr)
+    wincmd p
   endif
 endfunc
 
