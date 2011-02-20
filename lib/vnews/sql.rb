@@ -67,6 +67,11 @@ class Vnews
       @client.query query
     end
 
+    def search_items(term)
+      query = "select * from items where match(title, text) against('#{e term}')"
+      @client.query query
+    end
+
     def e(value)
       return unless value
       @client.escape(value)

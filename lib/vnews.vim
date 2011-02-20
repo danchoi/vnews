@@ -16,6 +16,7 @@ let s:list_feeds_command = s:client_script . 'feeds '
 let s:list_folder_items_command = s:client_script . 'folder_items ' 
 let s:list_feed_items_command = s:client_script . 'feed_items ' 
 let s:show_item_command = s:client_script . 'show_item '
+let s:search_items_command = s:client_script . 'search_items '
 
 let s:folder = "All"
 let s:feed = "All"
@@ -53,6 +54,7 @@ function! s:create_list_window()
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
   nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
   nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
+
 endfunction
 
 function! s:create_item_window() 
@@ -164,6 +166,15 @@ func! s:list_feeds()
   end
 endfunc
 
+func! s:display_items(res)
+  setlocal modifiable
+  silent! 1,$delete
+  silent! put! =a:res
+  silent normal Gdd
+  setlocal nomodifiable
+  normal zz
+endfunc
+
 " right now, just does folders
 function! s:fetch_items(selection)
   " take different actions depending on whether a feed or folder?
@@ -171,7 +182,6 @@ function! s:fetch_items(selection)
   if exists("s:selectionlist") && index(s:selectionlist, a:selection) == -1
     return
   end
-  setlocal modifiable
   if s:selectiontype == "folder"
     let command = s:list_folder_items_command 
   else
@@ -179,17 +189,13 @@ function! s:fetch_items(selection)
   endif
   let command .= winwidth(0) . ' ' .shellescape(a:selection)
   let res = system(command)
-  silent! 1,$delete
-  silent! put! =res
-  silent normal Gdd
-  setlocal nomodifiable
-  normal zz
+  call s:display_items(res)
 endfunction
 
 " blank arg is not used yet
 func! s:show_item_under_cursor(blank)
   let line = getline(line("."))
-  let s:guid = matchstr(line, '\S\+$')
+  let s:guid = matchstr(line, '[^|]\+$')
   if s:guid == ""
     return
   end
@@ -279,7 +285,16 @@ if !exists("g:Vnews#browser_command")
     echom "Can't find the to open your web browser."
   endif
 endif
+"------------------------------------------------------------------------
+" SEARCH
+func! s:search_items(term)
+  let command = s:search_items_command . winwidth(0) . ' ' . shellescape(a:term)
+  let res = system(command)
+  call s:display_items(res)
+endfunc
 
+
+command! -bar -nargs=1 VNSearch :call s:search_items(<f-args>)
 
 
 call s:create_list_window()

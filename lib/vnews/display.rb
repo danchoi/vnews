@@ -35,6 +35,7 @@ class Vnews
     # "word_count"=>41}
 
     def col(string, width)
+      return unless string
       string[0,width].ljust(width)
     end
 
@@ -91,7 +92,7 @@ class Vnews
     end
 
     def show_item(guid)
-      res = @sqliteclient.show_item(guid).first
+      res = @sqliteclient.show_item(guid.strip).first
       if res
         format_item(res)
       else
@@ -99,7 +100,11 @@ class Vnews
       end
     end
 
-
+    def search_items(window_width, term)
+      @sqliteclient.search_items(term).map do |x|
+        format_item_summary x, window_width
+      end
+    end
   end
 end
 
