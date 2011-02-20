@@ -41,9 +41,15 @@ class Vnews
     # queries:
 
     def folders
-      @client.query("SELECT folder, count(*) as count from feeds_folders 
+      starred = @client.query("SELECT 'Starred' as folder, count(*) as count from items
+                    where items.starred = true").first
+
+      folders = @client.query("SELECT folder, count(*) as count from feeds_folders 
                     inner join items i on i.feed = feeds_folders.feed
                     group by folder order by folder")
+
+      folders = [starred] + folders.to_a 
+      folders
     end
 
     def feeds
@@ -60,9 +66,17 @@ class Vnews
     end
 
     def folder_items(folder) 
-      query = "SELECT items.title, items.guid, items.feed, items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
-                    inner join feeds_folders ff on  ff.feed = items.feed
-                    where ff.folder = '#{e folder}' order by items.pub_date asc"
+      query = case folder 
+              when 'Starred' 
+                "SELECT items.title, items.guid, items.feed, 
+                items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
+                      where items.starred = true order by items.pub_date asc"
+              else 
+                "SELECT items.title, items.guid, items.feed, 
+                items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
+                      inner join feeds_folders ff on  ff.feed = items.feed
+                      where ff.folder = '#{e folder}' order by items.pub_date asc"
+              end
       @client.query query
     end
 
@@ -75,8 +89,6 @@ class Vnews
 
     def star_item(guid, star=true)
       @client.query "UPDATE items set starred = #{star} where guid = '#{e guid}'"
-
-      # TODO add to or rm from Starred folder
     end
 
     def search_items(term)
@@ -88,6 +100,7 @@ class Vnews
       return unless value
       @client.escape(value)
     end
+
   end
 
   SQLCLIENT = Sql.new() # TODO inject config here
