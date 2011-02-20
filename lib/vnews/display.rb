@@ -6,6 +6,7 @@ class Vnews
 
     def initialize
       @sqliteclient = Vnews::SQLCLIENT
+      @window_width = 140
     end
 
     # returns folders as a list
@@ -48,14 +49,12 @@ class Vnews
     end
 
     def format_item_summary(i)
-      feed_title = col i['feed_title'], 20
-      title = col(i['title'], 50)
-      d = i['pub_date']
-      date_string = format_date(d)
-      date = col(date_string, 9)
+      feed_title = col i['feed_title'], 25
+      title = col i['title'], 80
+      word_count = col i['word_count'].to_s, 6 
+      date = col format_date(i['pub_date']), 200 # to push guid all the way off screen
       guid = i['guid']
-      word_count = col i['word_count'].to_s, 6
-      "%s %s %s %s %s" % [feed_title, title, word_count, date, guid]
+      "%s | %s | %s | %s | %s" % [feed_title, title, word_count, date, guid]
     end
 
     # look up feed up idx
@@ -92,6 +91,10 @@ class Vnews
       else
         "No item found"
       end
+    end
+
+    def window_width=(width)
+      @window_width = width.to_i
     end
 
   end

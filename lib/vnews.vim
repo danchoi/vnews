@@ -16,7 +16,6 @@ let s:list_feeds_command = s:client_script . 'feeds '
 let s:list_folder_items_command = s:client_script . 'folder_items ' 
 let s:list_feed_items_command = s:client_script . 'feed_items ' 
 let s:show_item_command = s:client_script . 'show_item '
-let s:set_window_width_command = s:client_script . "window_width= "
 
 let s:folder = "All"
 let s:feed = "All"
@@ -248,6 +247,7 @@ endfunc
 call s:create_list_window()
 call s:create_item_window()
 call s:focus_window(s:listbufnr) 
+
 
 let s:selectiontype = "folder"
 call s:fetch_items("Main")
