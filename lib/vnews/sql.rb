@@ -42,9 +42,11 @@ class Vnews
                     group by folder order by folder")
     end
 
-    def feeds(folder)
-      condition = folder.nil? ? "" : "where ff.folder = '#{e folder}'"
-      @client.query("SELECT feeds.* from feeds left join feeds_folders ff on (ff.feed = feeds.link) #{condition} order by feeds.title asc") 
+    def feeds
+      @client.query("SELECT feeds.*, count(*) as item_count from feeds 
+                    inner join items i on i.feed = feeds.feed_url
+                    group by feeds.feed_url
+                    order by feeds.title asc") 
     end
 
     def feed_items(feed_idx) 

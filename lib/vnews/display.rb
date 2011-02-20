@@ -20,9 +20,9 @@ class Vnews
     # {"title"=>"Bits",
     # "feed_url"=>"http://bits.blogs.nytimes.com/feed/",
     # "link"=>"http://bits.blogs.nytimes.com/"}
-    def feeds(folder=nil)
-      @sqliteclient.feeds(folder).map.with_index do |x, idx|
-        [ x['title'] , idx ].join(" ")
+    def feeds
+      @sqliteclient.feeds.map.with_index do |x, idx|
+        "#{ x['title'] } (#{x['item_count']})"
       end
     end
 
