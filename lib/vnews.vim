@@ -52,7 +52,7 @@ function! s:create_list_window()
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
-  nnoremap <leader>M :call <SID>list_folders()<CR>
+  nnoremap <leader>n :call <SID>list_folders()<CR>
   nnoremap <leader>m :call <SID>list_feeds()<CR>
 endfunction
 
@@ -66,7 +66,7 @@ function! s:create_item_window()
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
-  nnoremap <leader>M :call <SID>list_folders()<CR>
+  nnoremap <leader>n :call <SID>list_folders()<CR>
   nnoremap <leader>m :call <SID>list_feeds()<CR>
   close
 endfunction
@@ -167,6 +167,9 @@ endfunc
 function! s:fetch_items(selection)
   " take different actions depending on whether a feed or folder?
   call s:focus_window(s:listbufnr)
+  if exists("s:selectionlist") && index(s:selectionlist, a:selection) == -1
+    return
+  end
   setlocal modifiable
   if s:selectiontype == "folder"
     let command = s:list_folder_items_command 
