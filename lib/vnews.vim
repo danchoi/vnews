@@ -181,7 +181,7 @@ function! s:fetch_items(selection)
   silent! put! =res
   silent normal Gdd
   setlocal nomodifiable
-  normal z-
+  normal zz
 endfunction
 
 " blank arg is not used yet
@@ -228,7 +228,7 @@ func! s:close_item_window()
     call s:focus_window(s:listbufnr)
     wincmd p
     close!
-    normal z-
+    normal zz
   endif
 endfunc
 
