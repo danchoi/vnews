@@ -233,11 +233,17 @@ func! s:close_item_window()
 endfunc
 
 func! s:toggle_maximize_window()
-  if winnr('$') > 1
-    only
+  if bufwinnr(s:listbufnr) != -1 &&  bufwinnr(s:itembufnr) != -1 
+    if bufwinnr(s:listbufnr) == winnr()
+      call s:focus_window(s:itembufnr)
+      close
+    else
+      call s:focus_window(s:listbufnr)
+      close
+    endif
   elseif bufwinnr(s:listbufnr) == winnr()
     call s:show_item_under_cursor(1)
-  else " we're in the message window
+  elseif bufwinnr(s:itembufnr) == winnr()
     call s:focus_window(s:listbufnr)
     wincmd p
   endif
