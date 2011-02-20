@@ -15,12 +15,12 @@ class Vnews
         xs.each do |n|
           threads << Thread.new do 
             if n.attributes['xmlUrl']
-              feeds << Vnews::Feed.fetch_feed(n.attributes['xmlUrl'])
+              feeds << Vnews::Feed.fetch_feed(n.attributes['xmlUrl'].to_s)
             else
               folder = n.attributes["title"].to_s
-              $stderr.puts "folder: #{folder}"
+              $stderr.puts "Found folder: #{folder}"
               n.xpath("outline[@xmlUrl]").each do |m|
-                feeds << Vnews::Feed.fetch_feed(m.attributes['xmlUrl'], folder)
+                feeds << Vnews::Feed.fetch_feed(m.attributes['xmlUrl'].to_s, folder)
               end
             end
           end
@@ -31,10 +31,11 @@ class Vnews
       $stderr.puts "Making database records"
       feeds.each do |x|
         feed_url, f, folder = *x
+        folder ||= "Main"
         if f.nil?
           $stderr.print "\nNo feed found for #{feed_url}\n"
         else
-          Vnews::Feed.save_feed(feed_url, folder, f)
+          Vnews::Feed.save_feed(feed_url, f, folder)
         end
       end
       $stderr.puts "\nDone."

@@ -33,7 +33,7 @@ class Vnews
       end
       feed_yaml = FeedYamlizer.run(xml, charset)
       feed_yaml
-    rescue OpenURI::HTTPError, REXML::ParseException, NoMethodError
+    rescue OpenURI::HTTPError, REXML::ParseException, NoMethodError, Timeout::Error
       $stderr.puts "  #{$!} : #{$!.message}"
     end
 
@@ -55,6 +55,9 @@ class Vnews
         Vnews::SQLCLIENT.insert_item item.merge(:feed => feed_url, :feed_title => f[:meta][:title])
         $stderr.print "."
       end
+    rescue
+      puts "ERROR: dump: #{feed_url.inspect}, #{folder.inspect}: #{f.inspect} "
+      raise
     end
 
     def self.reload_feed(feed_url)

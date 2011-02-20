@@ -15,6 +15,8 @@ create table items (
   author varchar(255),
   text text,
   word_count int unsigned,
+  unread bool default true,
+  starred bool default false,
   primary key (feed,guid),
   fulltext (title, text)
 ) type=MyISAM;
