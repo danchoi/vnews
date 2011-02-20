@@ -51,8 +51,8 @@ function! s:create_list_window()
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
-  nnoremap <leader>n :call <SID>list_folders()<CR>
-  nnoremap <leader>m :call <SID>list_feeds()<CR>
+  nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
+  nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
 endfunction
 
 function! s:create_item_window() 
@@ -65,8 +65,10 @@ function! s:create_item_window()
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
-  nnoremap <leader>n :call <SID>list_folders()<CR>
-  nnoremap <leader>m :call <SID>list_feeds()<CR>
+  nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
+  nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
+  nnoremap <buffer> <leader>o :call <SID>find_next_href_and_open()<CR>
+  nnoremap <buffer> <leader>h :normal Gkk<CR>:call <SID>find_next_href_and_open()<CR>
   close
 endfunction
 
@@ -248,6 +250,36 @@ func! s:toggle_maximize_window()
     wincmd p
   endif
 endfunc
+
+"------------------------------------------------------------------------
+let s:http_link_pattern = 'https\?:[^ >)\]]\+'
+
+func! s:open_href_under_cursor()
+  let href = expand("<cWORD>") 
+  let command = g:Vnews#browser_command . " '" . href . "' "
+  call system(command)
+  echom command 
+endfunc
+
+func! s:find_next_href_and_open()
+  let res = search(s:http_link_pattern, 'cw')
+  if res != 0
+    call s:open_href_under_cursor()
+  endif
+endfunc
+
+if !exists("g:Vnews#browser_command")
+  for cmd in ["gnome-open", "open"] 
+    if executable(cmd)
+      let g:Vnews#browser_command = cmd
+      break
+    endif
+  endfor
+  if !exists("g:Vnews#browser_command")
+    echom "Can't find the to open your web browser."
+  endif
+endif
+
 
 
 call s:create_list_window()
