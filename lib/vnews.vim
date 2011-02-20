@@ -175,7 +175,7 @@ function! s:fetch_items(selection)
   else
     let command = s:list_feed_items_command
   endif
-  let command .= shellescape(a:selection)
+  let command .= winwidth(0) . ' ' .shellescape(a:selection)
   let res = system(command)
   silent! 1,$delete
   silent! put! =res

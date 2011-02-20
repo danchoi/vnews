@@ -48,28 +48,30 @@ class Vnews
       end 
     end
 
-    def format_item_summary(i)
-      feed_title = col i['feed_title'], 25
-      title = col i['title'], 80
-      word_count = col i['word_count'].to_s, 6 
-      date = col format_date(i['pub_date']), 200 # to push guid all the way off screen
+    def format_item_summary(i, width)
+      varwidth = width.to_i - 27
+      feed_title = col i['feed_title'], varwidth * 0.25
+      title = col i['title'], varwidth * 0.75
+      word_count = i['word_count'].to_s.rjust(6)
+      date = col format_date(i['pub_date']), 20 # to push guid all the way off screen
       guid = i['guid']
       "%s | %s | %s | %s | %s" % [feed_title, title, word_count, date, guid]
     end
 
     # look up feed up idx
     def feed_items(*feed_selection)
-      feed_title = feed_selection[0].split(' ')[0..-2].join(' ') 
+      window_width = feed_selection[0]
+      feed_title = feed_selection[1].split(' ')[0..-2].join(' ') 
       @sqliteclient.feed_items(feed_title).map do |x|
-        format_item_summary x
+        format_item_summary x, window_width
       end
     end
 
-    def folder_items(folder=nil)
+    def folder_items(window_width, folder)
       # strip off the count summary
       folder = folder.gsub(/\(\d+\)$/, '').strip
       @sqliteclient.folder_items(folder).map do |x|
-        format_item_summary x
+        format_item_summary x, window_width
       end
     end
 
@@ -93,9 +95,6 @@ class Vnews
       end
     end
 
-    def window_width=(width)
-      @window_width = width.to_i
-    end
 
   end
 end
