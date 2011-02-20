@@ -17,6 +17,10 @@ class Vnews
       end
     end
 
+    def delete_feed_items feed_url
+      puts @client.query("DELETE from items where feed = '#{e feed_url}'")
+    end
+
     def insert_item(item)
       # not sure if this is efficient
       @client.query "DELETE from items WHERE guid = '#{e item[:guid]}' and feed = '#{e item[:feed_title]}'"

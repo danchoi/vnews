@@ -106,7 +106,9 @@ class Vnews
       end
       res.empty? ? "No matches" : res
     end
+
   end
+
 end
 
 if __FILE__ == $0

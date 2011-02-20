@@ -5,6 +5,13 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'vnews/display'
 
-puts Vnews::Display.new.send *ARGV
+case ARGV.first 
+when 'reload' 
+  require 'vnews/feed'
+  puts Vnews::Feed.reload_feed ARGV[1]
+
+else
+  puts Vnews::Display.new.send *ARGV
+end
 
 
