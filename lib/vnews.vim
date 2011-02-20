@@ -190,7 +190,10 @@ endfunc
 " right now, just does folders
 function! s:fetch_items(selection)
   " take different actions depending on whether a feed or folder?
+  call s:focus_window(s:itembufnr)
+  call clearmatches()
   call s:focus_window(s:listbufnr)
+  call clearmatches()
   if exists("s:selectionlist") && index(s:selectionlist, a:selection) == -1
     return
   end
