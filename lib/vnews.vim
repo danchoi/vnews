@@ -8,6 +8,8 @@ endif
 let g:VnewsLoaded = 1
 
 let mapleader = ','
+highlight VnewsSearchTerm ctermbg=green guibg=green
+
 
 "let s:client_script = 'vnews-client '
 let s:client_script = 'bin/vnews-client '
@@ -346,10 +348,17 @@ endfunction
 "------------------------------------------------------------------------
 " SEARCH
 func! s:search_items(term)
+  call clearmatches()
   call s:focus_window(s:listbufnr)
   let command = s:search_items_command . winwidth(0) . ' ' . shellescape(a:term)
   let res = system(command)
   call s:display_items(res)
+  " show item for top match
+  normal gg
+  call s:show_item_under_cursor(0)
+  call matchadd("VnewsSearchTerm", '\c' . a:term )
+  call s:focus_window(s:listbufnr)
+  call matchadd("VnewsSearchTerm", '\c' . a:term )
 endfunc
 
 
