@@ -21,4 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'feed_yamlizer', '>=0.0.6'
   s.add_dependency 'nokogiri'
+
+  # remember to say in readme that fmt and tidy are required
+
 end

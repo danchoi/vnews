@@ -14,13 +14,7 @@ class Vnews
 
       vimscript = File.expand_path("../../vnews.vim", __FILE__)
 
-      # TODO buffer file should be feed list
-      buffer_file = "buffer.txt"
-      File.open(buffer_file, "w") do |file|
-        # file.puts outline
-      end
-
-      vim_command = "#{vim} -S #{vimscript} #{buffer_file}"
+      vim_command = "#{vim} -S #{vimscript}"
 
       STDERR.puts vim_command
 
