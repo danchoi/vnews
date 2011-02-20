@@ -37,7 +37,9 @@ class Vnews
     # queries:
 
     def folders
-      @client.query("SELECT folder, count(*) as count from feeds_folders group by folder order by folder")
+      @client.query("SELECT folder, count(*) as count from feeds_folders 
+                    inner join items i on i.feed = feeds_folders.feed
+                    group by folder order by folder")
     end
 
     def feeds(folder)
