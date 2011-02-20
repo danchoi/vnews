@@ -55,20 +55,26 @@ class Vnews
 
     # Not perfect because some feeds may have dup titles
     def feed_items(feed_title) 
-      query = "SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed_title = '#{e feed_title}' order by pub_date asc"
+      query = "SELECT items.title, guid, feed, feed_title, pub_date, word_count, starred from items where items.feed_title = '#{e feed_title}' order by pub_date asc"
       @client.query(query)
     end
 
     def folder_items(folder) 
-      query = "SELECT items.title, items.guid, items.feed, items.feed_title, items.pub_date, items.word_count from items 
+      query = "SELECT items.title, items.guid, items.feed, items.feed_title, items.pub_date, items.word_count, items.starred from items 
                     inner join feeds_folders ff on  ff.feed = items.feed
                     where ff.folder = '#{e folder}' order by items.pub_date asc"
       @client.query query
     end
 
     def show_item(guid)
+      # mark item as read
+      @client.query "UPDATE items set unread = false where guid = '#{e guid}'"
       query = "SELECT items.* from items where guid = '#{e guid}'"
       @client.query query
+    end
+
+    def star_item(guid, star=true)
+      @client.query "UPDATE items set starred = #{star} where guid = '#{e guid}'"
     end
 
     def search_items(term)

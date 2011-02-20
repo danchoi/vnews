@@ -16,6 +16,8 @@ let s:list_feeds_command = s:client_script . 'feeds '
 let s:list_folder_items_command = s:client_script . 'folder_items ' 
 let s:list_feed_items_command = s:client_script . 'feed_items ' 
 let s:show_item_command = s:client_script . 'show_item '
+let s:star_item_command = s:client_script . 'star_item ' " + guid star(bool)
+let s:unstar_item_command = s:client_script . 'unstar_item ' " + guid star(bool)
 let s:search_items_command = s:client_script . 'search_items '
 
 let s:folder = "All"
@@ -55,6 +57,13 @@ function! s:create_list_window()
   nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
   nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
 
+  nnoremap <buffer> <leader>* :call <SID>toggle_star()<CR>
+  nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
+  if !exists("g:VnewsStarredColor")
+    let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"
+  endif
+  syn match VnewsBufferStarred /^*.*/hs=s
+  exec "hi def VnewsBufferStarred " . g:VnewsStarredColor
 endfunction
 
 function! s:create_item_window() 
@@ -192,10 +201,15 @@ function! s:fetch_items(selection)
   call s:display_items(res)
 endfunction
 
-" blank arg is not used yet
-func! s:show_item_under_cursor(blank)
+func! s:get_guid()
   let line = getline(line("."))
   let s:guid = matchstr(line, '[^|]\+$')
+  return s:trimString(s:guid)
+endfunc
+
+" blank arg is not used yet
+func! s:show_item_under_cursor(blank)
+  let s:guid = s:get_guid()
   if s:guid == ""
     return
   end
@@ -285,6 +299,41 @@ if !exists("g:Vnews#browser_command")
     echom "Can't find the to open your web browser."
   endif
 endif
+
+
+"------------------------------------------------------------------------
+" TOGGLE STAR
+
+function! s:toggle_star() 
+  let s:guid = s:get_guid()
+  let flag_symbol = "^*"
+  if match(getline(a:firstline), flag_symbol) != -1
+    let already_starred = 1
+  else
+    let already_starred = 0
+  end
+  if !already_starred
+    let command = s:star_item_command 
+  else
+    let command = s:unstar_item_command 
+  endif
+  let command .=  shellescape(s:guid )
+  let res = system(command)
+  setlocal modifiable
+  let line = getline('.')
+  " toggle * on line
+  if !already_starred
+    let newline = substitute(line, '^ ', '*', '')
+    let newline = substitute(newline, '^+', '*', '')
+  else
+    let newline = substitute(line, '^*', ' ', '')
+  endif
+  call setline(line('.'), newline)
+  setlocal nomodifiable
+  redraw
+endfunction
+"nnoremap <silent> <buffer> <leader>*  :call <SID>focus_list_window()<cr>:call <SID>toggle_star()<cr>
+
 "------------------------------------------------------------------------
 " SEARCH
 func! s:search_items(term)
