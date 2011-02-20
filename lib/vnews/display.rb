@@ -57,8 +57,9 @@ class Vnews
       date = col format_date(i['pub_date']), 20 # to push guid all the way off screen
       guid = i['guid']
 
-      starred = i['starred'] == 1 ? '*' : ' '
-      "%s | %s | %s | %s | %s | %s" % [starred, feed_title, title, word_count, date, guid]
+      flag = i['unread'] == 1 ? '+' : ' '
+      flag = i['starred'] == 1 ? '*' : flag
+      "%s | %s | %s | %s | %s | %s" % [flag, feed_title, title, word_count, date, guid]
     end
 
     # look up feed up idx

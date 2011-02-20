@@ -56,7 +56,6 @@ function! s:create_list_window()
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
   nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
   nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
-
   nnoremap <buffer> <leader>* :call <SID>toggle_star()<CR>
   nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
   if !exists("g:VnewsStarredColor")
@@ -80,6 +79,8 @@ function! s:create_item_window()
   nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
   nnoremap <buffer> <leader>o :call <SID>find_next_href_and_open()<CR>
   nnoremap <buffer> <leader>h :normal Gkk<CR>:call <SID>find_next_href_and_open()<CR>
+  nnoremap <buffer> <leader>*  :call <SID>toggle_star()<cr>
+  nnoremap <buffer> <leader>8  :call <SID>toggle_star()<cr>
   close
 endfunction
 
@@ -213,7 +214,12 @@ func! s:show_item_under_cursor(blank)
   if s:guid == ""
     return
   end
-  echo s:guid
+  " mark as read
+  set modifiable
+  let newline = substitute(getline('.'), '^+', ' ', '')
+  call setline(line('.'), newline)
+  set nomodifiable
+
   let res = system(s:show_item_command . shellescape( s:guid))
   call s:focus_window(s:itembufnr)
   set modifiable
@@ -305,9 +311,11 @@ endif
 " TOGGLE STAR
 
 function! s:toggle_star() 
+  let original_winnr = winnr()
+  call s:focus_window(s:listbufnr)
   let s:guid = s:get_guid()
   let flag_symbol = "^*"
-  if match(getline(a:firstline), flag_symbol) != -1
+  if match(getline('.'), flag_symbol) != -1
     let already_starred = 1
   else
     let already_starred = 0
@@ -330,6 +338,7 @@ function! s:toggle_star()
   endif
   call setline(line('.'), newline)
   setlocal nomodifiable
+  exec original_winnr . "wincmd w"
   redraw
 endfunction
 "nnoremap <silent> <buffer> <leader>*  :call <SID>focus_list_window()<cr>:call <SID>toggle_star()<cr>
