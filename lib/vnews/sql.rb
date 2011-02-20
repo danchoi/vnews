@@ -49,13 +49,10 @@ class Vnews
                     order by feeds.title asc") 
     end
 
-    def feed_items(feed_idx) 
-      f = @client.query("SELECT feed_url from feeds order by title asc limit 1 offset #{feed_idx}").first
-      if f.nil?
-        raise "no feed found for #{feed_idx}"
-      end
-      feed_url = f["feed_url"]
-      @client.query("SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed = '#{e feed_url}' order by pub_date asc") 
+    # Not perfect because some feeds may have dup titles
+    def feed_items(feed_title) 
+      query = "SELECT items.title, guid, feed, feed_title, pub_date, word_count from items where items.feed_title = '#{e feed_title}' order by pub_date asc"
+      @client.query(query)
     end
 
     def folder_items(folder) 

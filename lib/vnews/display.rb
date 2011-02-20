@@ -60,9 +60,8 @@ class Vnews
 
     # look up feed up idx
     def feed_items(*feed_selection)
-      idx = feed_selection.join(' ')[/\d+$/, 0]
-      raise "Need an idx for feed #{feed_selection.inspect}: #{idx.inspect}" unless idx
-      @sqliteclient.feed_items(idx).map do |x|
+      feed_title = feed_selection[0].split(' ')[0..-2].join(' ') 
+      @sqliteclient.feed_items(feed_title).map do |x|
         format_item_summary x
       end
     end

@@ -140,7 +140,7 @@ function! s:select_folder_or_feed()
   if (folder_or_feed == '') " no selection
     return
   end
-  call s:fill_items(folder_or_feed)
+  call s:fetch_items(folder_or_feed)
 endfunction
 
 func! s:list_folders()
@@ -164,19 +164,16 @@ func! s:list_feeds()
 endfunc
 
 " right now, just does folders
-function! s:fill_items(selection)
+function! s:fetch_items(selection)
   " take different actions depending on whether a feed or folder?
   call s:focus_window(s:listbufnr)
   setlocal modifiable
   if s:selectiontype == "folder"
     let command = s:list_folder_items_command 
-    let command .= shellescape(a:selection)
   else
     let command = s:list_feed_items_command
-    " find idx of selection
-    let idx = index(s:selectionlist,  a:selection)
-    let command .= shellescape(idx)
   endif
+  let command .= shellescape(a:selection)
   let res = system(command)
   silent! 1,$delete
   silent! put! =res
@@ -250,6 +247,6 @@ call s:create_item_window()
 call s:focus_window(s:listbufnr) 
 
 let s:selectiontype = "folder"
-call s:fill_items("Main")
+call s:fetch_items("Main")
 
 
