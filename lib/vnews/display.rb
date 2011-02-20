@@ -83,6 +83,10 @@ class Vnews
 #{item['title']}#{item['author'] ? ("\n" + item['author']) : '' }  
 
 #{item['text']}
+
+---
+#{item['link']}
+
       END
     end
 
