@@ -288,6 +288,7 @@ endif
 "------------------------------------------------------------------------
 " SEARCH
 func! s:search_items(term)
+  call s:focus_window(s:listbufnr)
   let command = s:search_items_command . winwidth(0) . ' ' . shellescape(a:term)
   let res = system(command)
   call s:display_items(res)

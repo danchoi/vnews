@@ -101,9 +101,10 @@ class Vnews
     end
 
     def search_items(window_width, term)
-      @sqliteclient.search_items(term).map do |x|
+      res = @sqliteclient.search_items(term).map do |x|
         format_item_summary x, window_width
       end
+      res.empty? ? "No matches" : res
     end
   end
 end
