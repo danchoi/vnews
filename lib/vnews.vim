@@ -134,7 +134,7 @@ function! CompleteFunction(findstart, base)
 endfun
 
 function! s:select_folder_or_feed()
-  let folder_or_feed = s:trimString(get(split(getline(line('.')), ": "), 1) )
+  let folder_or_feed = s:trimString(join(split(getline(line('.')), ":")[1:-1], ":"))
   close
   call s:focus_window(s:listbufnr)
   if (folder_or_feed == '') " no selection
