@@ -92,7 +92,7 @@ class Vnews
       res = <<-END
 #{item['feed']}
 
-#{format_date item['pub_date']}, #{item['word_count']} words, #{item['feed_title']}
+#{item['pub_date']}, #{item['word_count']} words, #{item['feed_title']}
  
 
 #{item['title']}#{item['author'] ? ("\n" + item['author']) : '' }  
