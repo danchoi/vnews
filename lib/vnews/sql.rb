@@ -52,11 +52,11 @@ class Vnews
       folders
     end
 
-    def feeds
+    def feeds(order)
       @client.query("SELECT feeds.*, count(*) as item_count from feeds 
                     inner join items i on i.feed = feeds.feed_url
                     group by feeds.feed_url
-                    order by feeds.title asc") 
+                    order by #{order}") 
     end
 
     # Not perfect because some feeds may have dup titles

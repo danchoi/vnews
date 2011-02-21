@@ -38,7 +38,8 @@ endfunc
 function! s:common_mappings()
   nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
   nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
-  nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
+  nnoremap <buffer> <leader>m :call <SID>list_feeds(0)<CR>
+  nnoremap <buffer> <leader>M :call <SID>list_feeds(1)<CR>
   nnoremap <buffer> <leader>* :call <SID>toggle_star()<CR>
   nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
   nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
@@ -175,8 +176,11 @@ func! s:list_folders()
   end
 endfunc
 
-func! s:list_feeds()
-  let feeds = split(system(s:list_feeds_command), "\n")
+func! s:list_feeds(popular_first)
+  " default is alphabetical 
+  " 1 means order by last accessed first
+  let res = system(s:list_feeds_command . " " . a:popular_first) 
+  let feeds = split(res, "\n")
   if len(feeds) == 0
     echom "There are no feeds."
   else

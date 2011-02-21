@@ -21,8 +21,10 @@ class Vnews
     # {"title"=>"Bits",
     # "feed_url"=>"http://bits.blogs.nytimes.com/feed/",
     # "link"=>"http://bits.blogs.nytimes.com/"}
-    def feeds
-      @sqliteclient.feeds.map.with_index do |x, idx|
+    def feeds(order)
+      # '0' is alphabetical, '1' is last accessed first
+      sql_order = order == '0' ? "feeds.title asc" : "feeds.num_items_read desc"
+      @sqliteclient.feeds(sql_order).map.with_index do |x, idx|
         "#{ x['title'] } (#{x['item_count']})"
       end
     end

@@ -2,6 +2,7 @@ create table feeds (
   title varchar(255),
   feed_url varchar(255),
   link varchar(255),
+  num_items_read int default 0, /*a counter of the number of items read from this feed*/
   primary key (feed_url)
 ) type=MyISAM;
 
