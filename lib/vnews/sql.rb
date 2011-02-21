@@ -41,11 +41,12 @@ class Vnews
     # queries:
 
     def folders
-      all = @client.query("SELECT 'All' as folder, count(*) as count from items").first
+      all = @client.query("SELECT 'All' as folder, count(*) as count from items where items.unread = true").first
       starred = @client.query("SELECT 'Starred' as folder, count(*) as count from items
                     where items.starred = true").first
       folders = @client.query("SELECT folder, count(*) as count from feeds_folders 
                     inner join items i on i.feed = feeds_folders.feed
+                      where i.unread = true
                     group by folder order by folder")
       folders = [all, starred] + folders.to_a 
       folders
@@ -56,6 +57,7 @@ class Vnews
         # "feeds.title asc" 
         @client.query("SELECT feeds.*, count(*) as item_count from feeds 
                       inner join items i on i.feed = feeds.feed_url
+                      where i.unread = true
                       group by feeds.feed_url
                       order by feeds.title asc") 
       else
