@@ -211,6 +211,8 @@ function! s:fetch_items(selection)
   let command .= winwidth(0) . ' ' .shellescape(a:selection)
   let res = system(command)
   call s:display_items(res)
+  normal G
+  call s:show_item_under_cursor(0)
 endfunction
 
 func! s:get_guid(line)
@@ -394,7 +396,6 @@ command! -bar -nargs=1 VNSearch :call s:search_items(<f-args>)
 call s:create_list_window()
 call s:create_item_window()
 call s:focus_window(s:listbufnr) 
-
 
 let s:selectiontype = "folder"
 call s:fetch_items("Main")
