@@ -18,7 +18,7 @@ class Vnews
               feeds << Vnews::Feed.fetch_feed(n.attributes['xmlUrl'].to_s)
             else
               folder = n.attributes["title"].to_s
-              $stderr.puts "Found folder: #{folder}"
+              $stderr.print "Found folder: #{folder}\n"
               n.xpath("outline[@xmlUrl]").each do |m|
                 feeds << Vnews::Feed.fetch_feed(m.attributes['xmlUrl'].to_s, folder)
               end

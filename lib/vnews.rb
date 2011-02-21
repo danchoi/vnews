@@ -34,8 +34,9 @@ class Vnews
       puts "Importing OPML file #{ARGV[1]}"
       Vnews::Opml.import File.read(ARGV[1])
       # rewrite .vnewsrc config
+      puts "Rewriting config file #{Vnews::Config::CONFIGPATH} to reflect changes."
       Vnews::Config.rewrite_config
-      puts "Rewrote config file #{Vnews::Config::CONFIGPATH} to reflect changes."
+      puts "Done."
     end
 
     if ARGV.first == "--update"
