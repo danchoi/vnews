@@ -79,7 +79,6 @@ class Vnews
 
       puts "Adding feeds: #{(new_feeds - old_feeds).inspect}"
       puts "Adding folder-feed associations: #{(ff - old_ff).inspect}"
-
       feeds2 = []
       threads = []
       ff.each do |feed_url, folder|
@@ -108,7 +107,6 @@ class Vnews
       f = File.read(File.expand_path(CONFIGPATH))
       top, bottom = f.split(/^\s*$/,2)
       dbconfig = YAML::load top
-      puts "Loaded database config for #{dbconfig['username']}@#{dbconfig['database']} at #{dbconfig['host']}"
       Sql.new(dbconfig)
     end
   end

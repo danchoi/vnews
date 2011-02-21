@@ -47,6 +47,8 @@ class Vnews
 
     def delete_feed(feed_url)
       @client.query "DELETE from feeds where feed_url = '#{e feed_url}'"
+      # Delete all unstarred items from these feeds
+      @client.query "DELETE from items where feed = '#{e feed_url}' and starred = false"
     end
 
     def delete_feed_folder(feed, folder)
