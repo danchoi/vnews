@@ -27,7 +27,9 @@ let s:cat_items_command = s:client_script . 'cat_items '
 let s:folder = "All"
 let s:feed = "All"
 function! VnewsStatusLine()
-  return "%<%f\ " . s:folder . " " . s:feed . "%r%=%-14.(%l,%c%V%)\ %P"
+  let end_index = match(s:last_selection, '(\d\+)$')
+  let selection = s:last_selection[0:end_index-1]
+  return "%<%f\ " . s:selectiontype . " " . selection . "%r%=%-14.(%l,%c%V%)\ %P"
 endfunction
 
 func! s:trimString(string)
@@ -74,7 +76,7 @@ function! s:create_list_window()
   nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
-  command! -bar -nargs=0 -range VNCat :<line1>,<line2>call s:cat_items()
+  command! -bar -nargs=0 -range VNConcat :<line1>,<line2>call s:cat_items()
   call s:common_mappings()
   if !exists("g:VnewsStarredColor")
     let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"
@@ -465,6 +467,6 @@ call s:create_list_window()
 call s:create_item_window()
 call s:focus_window(s:listbufnr) 
 let s:selectiontype = "folder"
-call s:fetch_items("All")
+call s:fetch_items("All (0)") " number won't show but is assumed by function VnewsStatusLine()
 
 
