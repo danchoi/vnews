@@ -65,6 +65,11 @@ class Vnews
       @client.query(query)
     end
 
+    def feed_by_title(feed_title)
+      query = "SELECT * from feeds where title = '#{e feed_title}'"
+      @client.query(query).first["feed_url"]
+    end
+
     def folder_items(folder) 
       query = case folder 
               when 'Starred' 

@@ -60,12 +60,17 @@ class Vnews
       raise
     end
 
-    def self.update_feed(feed_url)
+    def self.update_feed(feed_title)
+      require 'vnews/display'
+      feed_title = Vnews::Display.strip_item_count(feed_title)
+      puts "Updating feed: #{feed_title}"
+      feed_url = Vnews::SQLCLIENT.feed_by_title feed_title
+      puts "Fetching data from feed url: #{feed_url}"
       # puts "Deleting feed items for #{feed_url}"
       # Vnews::SQLCLIENT.delete_feed_items feed_url
       f = Vnews::Feed.get_feed feed_url
       save_feed feed_url, f, nil
-      puts "Reloaded"
+      puts "\nFeed updated"
     end
 
     def self.log(text)

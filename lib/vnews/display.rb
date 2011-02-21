@@ -71,9 +71,13 @@ class Vnews
       end
     end
 
+    def self.strip_item_count(folder)
+      folder.gsub(/\(\d+\)$/, '').strip
+    end
+
     def folder_items(window_width, folder)
       # strip off the count summary
-      folder = folder.gsub(/\(\d+\)$/, '').strip
+      folder = self.class.strip_item_count(folder)
       @sqliteclient.folder_items(folder).map do |x|
         format_item_summary x, window_width
       end

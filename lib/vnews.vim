@@ -43,6 +43,7 @@ function! s:common_mappings()
   nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
   nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
   nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
+  command! -bar -nargs=0 VNUpdateFeed  :call <SID>update_feed()
 endfunc
 
 function! s:create_list_window()
@@ -209,6 +210,8 @@ function! s:fetch_items(selection)
     let command = s:list_feed_items_command
   endif
   let command .= winwidth(0) . ' ' .shellescape(a:selection)
+  let s:last_fetch_command = command " in case user later updates the feed in place
+  let s:last_selection = a:selection
   let res = system(command)
   call s:display_items(res)
   normal G
@@ -388,6 +391,24 @@ func! s:search_items(term)
   call matchadd("VnewsSearchTerm", '\c' . a:term )
   call s:focus_window(s:listbufnr)
   call matchadd("VnewsSearchTerm", '\c' . a:term )
+endfunc
+
+"------------------------------------------------------------------------
+" UPDATE FEED
+
+func! s:update_feed()
+  call s:focus_window(s:listbufnr)
+  if exists("s:last_selection")
+    exec ":!vnews-client update_feed ".shellescape(s:last_selection)
+  endif
+  if exists("s:last_fetch_command")
+    let res = system(s:last_fetch_command)
+    call s:display_items(res)
+  end
+  redraw!
+  normal G
+  call s:show_item_under_cursor(0)
+  redraw!
 endfunc
 
 

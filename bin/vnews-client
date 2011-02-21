@@ -6,7 +6,7 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'vnews/display'
 
 case ARGV.first 
-when 'reload' 
+when 'update_feed' 
   require 'vnews/feed'
   puts Vnews::Feed.update_feed ARGV[1]
 
