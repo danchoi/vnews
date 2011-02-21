@@ -66,7 +66,7 @@ function! s:create_list_window()
   let s:listbufnr = bufnr('')
   let s:listbufname = bufname('')
   setlocal statusline=%!VnewsStatusLine()
-  noremap <silent> <buffer> <cr> :call <SID>show_item_under_cursor(0)<CR>
+  noremap <silent> <buffer> <cr> :call <SID>show_item_under_cursor(1)<CR>
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
@@ -119,6 +119,7 @@ function! s:open_selection_window(selectionlist, buffer_name, prompt)
   let s:selectionlist = a:selectionlist 
   call s:focus_window(s:listbufnr)
   exec "leftabove split ".a:buffer_name
+  setlocal textwidth=0
   setlocal completefunc=CompleteFunction
   setlocal buftype=nofile
   setlocal noswapfile
@@ -128,17 +129,14 @@ function! s:open_selection_window(selectionlist, buffer_name, prompt)
   noremap <buffer> q <Esc>:close<cr>
   inoremap <buffer> <Esc> <Esc>:close<cr>
   call setline(1, a:prompt)
+  let s:prompt = a:prompt
   normal $
   call feedkeys("a\<c-x>\<c-u>\<c-p>", 't')
 endfunction
 
 function! CompleteFunction(findstart, base)
   if a:findstart
-    let line = getline('.')
-    let start = col('.') - 1
-    while start > 0 && line[start - 1] =~ '\m[[:alnum:]]'
-      let start -= 1
-    endwhile
+    let start = len(s:prompt) + 1
     return start
   else
     let base = s:trimString(a:base)
@@ -156,8 +154,10 @@ function! CompleteFunction(findstart, base)
   endif
 endfun
 
+" selection window pick
 function! s:select_folder_or_feed()
-  let folder_or_feed = s:trimString(join(split(getline(line('.')), ":")[1:-1], ":"))
+  " let folder_or_feed = s:trimString(join(split(getline(line('.')), ":")[1:-1], ":"))
+  let folder_or_feed = getline('.')[len(s:prompt):]
   close
   call s:focus_window(s:listbufnr)
   if (folder_or_feed == '') " no selection
@@ -178,14 +178,15 @@ endfunc
 
 func! s:list_feeds(popular_first)
   " default is alphabetical 
-  " 1 means order by last accessed first
+  " 1 means order by popular_first
   let res = system(s:list_feeds_command . " " . a:popular_first) 
+  let promptsuffix =  a:popular_first ? "(num of item views)" : "(num of items)"
   let feeds = split(res, "\n")
   if len(feeds) == 0
     echom "There are no feeds."
   else
     let s:selectiontype = "feed"
-    call s:open_selection_window(feeds, 'select-feed', "Select feed: ")
+    call s:open_selection_window(feeds, 'select-feed', "Select feed ". promptsuffix .": ")
   end
 endfunc
 
@@ -228,8 +229,10 @@ func! s:get_guid(line)
   return s:trimString(s:guid)
 endfunc
 
+"------------------------------------------------------------------------
+" SHOW ITEM
 " blank arg is not used yet
-func! s:show_item_under_cursor(blank)
+func! s:show_item_under_cursor(inc_read_count)
   let s:guid = s:get_guid(line('.'))
   if s:guid == ""
     return
@@ -239,8 +242,7 @@ func! s:show_item_under_cursor(blank)
   let newline = substitute(getline('.'), '^+', ' ', '')
   call setline(line('.'), newline)
   set nomodifiable
-
-  let res = system(s:show_item_command . shellescape( s:guid))
+  let res = system(s:show_item_command . shellescape( s:guid) . ' '. ( a:inc_read_count ? "1" : "" ) )
   call s:focus_window(s:itembufnr)
   set modifiable
   silent 1,$delete
@@ -422,8 +424,7 @@ command! -bar -nargs=1 VNSearch :call s:search_items(<f-args>)
 call s:create_list_window()
 call s:create_item_window()
 call s:focus_window(s:listbufnr) 
-
 let s:selectiontype = "folder"
-call s:fetch_items("Main")
+call s:fetch_items("All")
 
 

@@ -101,8 +101,9 @@ class Vnews
       END
     end
 
-    def show_item(guid)
-      res = @sqliteclient.show_item(guid.strip).first
+    def show_item(guid, increment_read_count=false)
+      inc_read_count = increment_read_count == '1' 
+      res = @sqliteclient.show_item(guid.strip, inc_read_count).first
       if res
         format_item(res)
       else

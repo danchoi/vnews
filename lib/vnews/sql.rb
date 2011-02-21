@@ -41,14 +41,13 @@ class Vnews
     # queries:
 
     def folders
+      all = @client.query("SELECT 'All' as folder, count(*) as count from items").first
       starred = @client.query("SELECT 'Starred' as folder, count(*) as count from items
                     where items.starred = true").first
-
       folders = @client.query("SELECT folder, count(*) as count from feeds_folders 
                     inner join items i on i.feed = feeds_folders.feed
                     group by folder order by folder")
-
-      folders = [starred] + folders.to_a 
+      folders = [all, starred] + folders.to_a 
       folders
     end
 
@@ -85,6 +84,10 @@ class Vnews
                 "SELECT items.title, items.guid, items.feed, 
                 items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
                       where items.starred = true order by items.pub_date asc"
+              when 'All' 
+                "SELECT items.title, items.guid, items.feed, 
+                items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
+                      order by items.pub_date asc limit 2000"
               else 
                 # update last_viewed_at 
                 @client.query "UPDATE feeds_folders SET last_viewed_at = now() where folder = '#{e folder}'"
@@ -97,12 +100,14 @@ class Vnews
       @client.query query
     end
 
-    def show_item(guid)
+    def show_item(guid, inc_read_count=false)
       # mark item as read
       @client.query "UPDATE items set unread = false where guid = '#{e guid}'"
 
-      # increment the read count for the feed 
-      @client.query "UPDATE feeds set num_items_read = num_items_read + 1 where feed_url = (select feed from items where items.guid = '#{e guid}')"
+      if inc_read_count
+        # increment the read count for the feed 
+        @client.query "UPDATE feeds set num_items_read = num_items_read + 1 where feed_url = (select feed from items where items.guid = '#{e guid}')"
+      end
 
       query = "SELECT items.* from items where guid = '#{e guid}'"
       @client.query query
