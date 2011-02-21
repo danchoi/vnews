@@ -24,6 +24,11 @@ class Vnews
       out.join("\n")
     end
 
+    def self.rewrite_config
+      out = generate_config
+      f = File.open(File.expand_path(CONFIGPATH), 'w') {|f| f.write(out)}
+    end
+
     def self.stub_config
       stub = <<-END.gsub(/^ */, '')
         host: localhost 

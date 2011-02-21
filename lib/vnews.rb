@@ -28,6 +28,16 @@ class Vnews
       exit
     end
 
+    if ARGV.first == "--opml"
+      require 'vnews/opml'
+      # opml file must be second arg
+      puts "Importing OPML file #{ARGV[1]}"
+      Vnews::Opml.import File.read(ARGV[1])
+      # rewrite .vnewsrc config
+      Vnews::Config.rewrite_config
+      puts "Rewrote config file #{Vnews::Config::CONFIGPATH} to reflect changes."
+    end
+
     if ARGV.first == "--update"
       Vnews::Config.update_folders
     end
