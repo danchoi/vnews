@@ -44,6 +44,8 @@ function! s:common_mappings()
   nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
   nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
   nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
+  nnoremap <buffer> u :call <SID>update_feed()<CR>
+  nnoremap <buffer> <leader>u :call <SID>update_feed()<CR>
   command! -bar -nargs=0 VNUpdateFeed  :call <SID>update_feed()
 endfunc
 
@@ -405,7 +407,11 @@ endfunc
 func! s:update_feed()
   call s:focus_window(s:listbufnr)
   if exists("s:last_selection")
-    exec ":!vnews-client update_feed ".shellescape(s:last_selection)
+    if s:selectiontype == "folder"
+      exec ":!vnews-client update_folder ".shellescape(s:last_selection)
+    elseif s:selectiontype == "feed"
+      exec ":!vnews-client update_feed ".shellescape(s:last_selection)
+    end
   endif
   if exists("s:last_fetch_command")
     let res = system(s:last_fetch_command)

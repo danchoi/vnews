@@ -9,7 +9,9 @@ case ARGV.first
 when 'update_feed' 
   require 'vnews/feed'
   puts Vnews::Feed.update_feed ARGV[1]
-
+when 'update_folder'
+  require 'vnews/folder'
+  puts Vnews::Folder.update_folder ARGV[1]
 else
   puts Vnews::Display.new.send *ARGV
 end

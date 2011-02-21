@@ -64,6 +64,18 @@ class Vnews
       end
     end
 
+    def feeds_in_folder(folder)
+      case folder
+      when "All"
+        @client.query("SELECT feed_url from feeds order by title asc").map {|x| x['feed_url']}
+      when "Starred"
+        return []
+      else
+        @client.query("SELECT feed from feeds_folders ff where ff.folder = '#{e folder}'").map {|x| x['feed']}
+      end
+    end
+
+
     # Not perfect because some feeds may have dup titles, but ok for now
     def feed_items(feed_title) 
       # update last_viewed_at 
