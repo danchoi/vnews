@@ -63,6 +63,7 @@ function! s:create_list_window()
   nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
   nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
   nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
+  command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
   if !exists("g:VnewsStarredColor")
     let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"
   endif
@@ -86,8 +87,8 @@ function! s:create_item_window()
   nnoremap <buffer> <leader>h :normal Gkk<CR>:call <SID>find_next_href_and_open()<CR>
   nnoremap <buffer> <leader>*  :call <SID>toggle_star()<cr>
   nnoremap <buffer> <leader>8  :call <SID>toggle_star()<cr>
-  nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
-  nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
+  nnoremap <buffer> <leader># :call <SID>focus_window(s:listbufnr)<CR>:call <SID>delete_item()<CR>
+  nnoremap <buffer> <leader>3 :call <SID>focus_window(s:listbufnr)<CR>:call <SID>delete_item()<CR>
   close
 endfunction
 
@@ -355,18 +356,20 @@ endfunction
 " DELETE ITEMS
 
 func! s:delete_item() 
-  call s:focus_window(s:listbufnr)
   let uid = s:get_guid(line('.'))
-  let command = s:delete_item_command . uid
+  let command = s:delete_item_command . shellescape(uid)
   let res = system(command)
   setlocal modifiable
   exec "silent " . line('.') . "delete"
   setlocal nomodifiable
-  wincmd p 
-  close
+  if winnr("$") > 1
+    wincmd p 
+    close
+  end
   redraw
   echom "Item ".uid." deleted"
 endfunc
+
 
 "------------------------------------------------------------------------
 " SEARCH
