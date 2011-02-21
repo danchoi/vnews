@@ -1,5 +1,6 @@
 require 'vnews/sql'
 require 'yaml'
+require 'date'
 
 class Vnews
   class Display
@@ -45,6 +46,8 @@ class Vnews
         "no date"
       elsif d.year != Time.now.year
         d.strftime("%b %Y")
+      elsif d.to_date == Time.now.to_date
+        d.strftime("%I:%M%P")
       else
         d.strftime("%b %d")
       end 
@@ -55,12 +58,13 @@ class Vnews
       feed_title = col i['feed_title'], varwidth * 0.25
       title = col i['title'], varwidth * 0.75
       word_count = i['word_count'].to_s.rjust(6)
-      date = col format_date(i['pub_date']), 20 # to push guid all the way off screen
+      date = format_date(i['pub_date']).rjust(7) 
+      spacer = " " * 20 # to push guid all the way off screen
       guid = i['guid']
 
       flag = i['unread'] == 1 ? '+' : ' '
       flag = i['starred'] == 1 ? '*' : flag
-      "%s | %s | %s | %s | %s | %s" % [flag, feed_title, title, word_count, date, guid]
+      "%s | %s | %s | %s | %s | %s | %s" % [flag, feed_title, title, word_count, date, spacer, guid]
     end
 
     # look up feed up idx
