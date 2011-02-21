@@ -91,6 +91,10 @@ class Vnews
       @client.query "UPDATE items set starred = #{star} where guid = '#{e guid}'"
     end
 
+    def delete_item(guid)
+      @client.query "DELETE from items where guid = '#{e guid}'" 
+    end
+
     def search_items(term)
       query = "select * from items where match(title, text) against('#{e term}')"
       @client.query query

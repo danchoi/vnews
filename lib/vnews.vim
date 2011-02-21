@@ -20,6 +20,7 @@ let s:list_feed_items_command = s:client_script . 'feed_items '
 let s:show_item_command = s:client_script . 'show_item '
 let s:star_item_command = s:client_script . 'star_item ' " + guid star(bool)
 let s:unstar_item_command = s:client_script . 'unstar_item ' " + guid star(bool)
+let s:delete_item_command = s:client_script . 'delete_item ' " + guid
 let s:search_items_command = s:client_script . 'search_items '
 
 let s:folder = "All"
@@ -60,6 +61,8 @@ function! s:create_list_window()
   nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
   nnoremap <buffer> <leader>* :call <SID>toggle_star()<CR>
   nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
+  nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
+  nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
   if !exists("g:VnewsStarredColor")
     let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"
   endif
@@ -83,6 +86,8 @@ function! s:create_item_window()
   nnoremap <buffer> <leader>h :normal Gkk<CR>:call <SID>find_next_href_and_open()<CR>
   nnoremap <buffer> <leader>*  :call <SID>toggle_star()<cr>
   nnoremap <buffer> <leader>8  :call <SID>toggle_star()<cr>
+  nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
+  nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
   close
 endfunction
 
@@ -207,15 +212,15 @@ function! s:fetch_items(selection)
   call s:display_items(res)
 endfunction
 
-func! s:get_guid()
-  let line = getline(line("."))
+func! s:get_guid(line)
+  let line = getline(a:line)
   let s:guid = matchstr(line, '[^|]\+$')
   return s:trimString(s:guid)
 endfunc
 
 " blank arg is not used yet
 func! s:show_item_under_cursor(blank)
-  let s:guid = s:get_guid()
+  let s:guid = s:get_guid(line('.'))
   if s:guid == ""
     return
   end
@@ -311,14 +316,13 @@ if !exists("g:Vnews#browser_command")
   endif
 endif
 
-
 "------------------------------------------------------------------------
 " TOGGLE STAR
 
 function! s:toggle_star() 
   let original_winnr = winnr()
   call s:focus_window(s:listbufnr)
-  let s:guid = s:get_guid()
+  let s:guid = s:get_guid(line('.'))
   let flag_symbol = "^*"
   if match(getline('.'), flag_symbol) != -1
     let already_starred = 1
@@ -346,7 +350,23 @@ function! s:toggle_star()
   exec original_winnr . "wincmd w"
   redraw
 endfunction
-"nnoremap <silent> <buffer> <leader>*  :call <SID>focus_list_window()<cr>:call <SID>toggle_star()<cr>
+
+"------------------------------------------------------------------------
+" DELETE ITEMS
+
+func! s:delete_item() 
+  call s:focus_window(s:listbufnr)
+  let uid = s:get_guid(line('.'))
+  let command = s:delete_item_command . uid
+  let res = system(command)
+  setlocal modifiable
+  exec "silent " . line('.') . "delete"
+  setlocal nomodifiable
+  wincmd p 
+  close
+  redraw
+  echom "Item ".uid." deleted"
+endfunc
 
 "------------------------------------------------------------------------
 " SEARCH

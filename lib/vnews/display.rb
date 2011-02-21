@@ -111,6 +111,10 @@ class Vnews
       @sqliteclient.star_item guid, false
     end
 
+    def delete_item(guid)
+      @sqliteclient.delete_item guid
+    end
+
 
     def search_items(window_width, term)
       res = @sqliteclient.search_items(term).map do |x|
