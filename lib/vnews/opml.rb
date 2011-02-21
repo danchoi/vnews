@@ -31,7 +31,7 @@ class Vnews
       $stderr.puts "Making database records"
       feeds.each do |x|
         feed_url, f, folder = *x
-        folder ||= "Main"
+        folder ||= "Misc"
         if f.nil?
           $stderr.print "\nNo feed found for #{feed_url}\n"
         else

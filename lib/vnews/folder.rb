@@ -2,7 +2,6 @@ require 'vnews/feed'
 
 class Vnews
   class Folder
-
     def self.update_folder(folder)
       if folder.strip == "Starred"
         puts "Sorry, you can't update the starred folder."

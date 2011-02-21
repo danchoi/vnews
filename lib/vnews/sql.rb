@@ -1,15 +1,20 @@
 require 'mysql2'
 class Vnews
   class Sql
+    attr_accessor :config
     def initialize(config = {})
-      defaults = {:host => 'localhost', :username => 'root', :database => 'vnews'}
+      config = config.inject({}) do |memo, (key, value)|
+        memo[key.to_sym] = value
+        memo
+      end
+      defaults = {:host => 'localhost',  :database => 'vnews', :username => 'root', :password => nil}
       @config = defaults.update(config)
       @client = Mysql2::Client.new @config
     end
 
     def insert_feed(title, feed_url, link, folder=nil)
       if folder.nil?
-        folder = 'Main'
+        folder = 'Misc'
       end
       @client.query "INSERT IGNORE INTO feeds (title, feed_url, link) VALUES ('#{e title}', '#{e feed_url}', '#{e link}')"
       if folder
@@ -46,10 +51,13 @@ class Vnews
                     where items.starred = true").first
       folders = @client.query("SELECT folder, count(*) as count from feeds_folders 
                     inner join items i on i.feed = feeds_folders.feed
-                      where i.unread = true
-                    group by folder order by folder")
+                      where i.unread = true group by folder order by folder")
       folders = [all, starred] + folders.to_a 
       folders
+    end
+
+    def configured_folders
+      folders = @client.query("SELECT distinct(folder) from feeds_folders order by folder asc")
     end
 
     def feeds(order)
@@ -77,12 +85,10 @@ class Vnews
       end
     end
 
-
     # Not perfect because some feeds may have dup titles, but ok for now
     def feed_items(feed_title) 
       # update last_viewed_at 
       @client.query "UPDATE feeds SET last_viewed_at = now() where title = '#{e feed_title}'"
-      
       query = "SELECT items.title, guid, feed, feed_title, pub_date, word_count, starred, unread from items where items.feed_title = '#{e feed_title}' order by pub_date asc"
       @client.query(query)
     end
