@@ -18,7 +18,6 @@ class Vnews
       exit
     end
 
-
     if ARGV.first == "--create-db"
       c = File.read(Vnews::Config::CONFIGPATH) 
       top, bottom = c.split(/^\s*$/,2)
