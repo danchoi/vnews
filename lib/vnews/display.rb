@@ -22,7 +22,7 @@ class Vnews
     # "feed_url"=>"http://bits.blogs.nytimes.com/feed/",
     # "link"=>"http://bits.blogs.nytimes.com/"}
     def feeds(order)
-      # '0' is alphabetical, '1' is last accessed first
+      # '0' is alphabetical, '1' is most popular first
       @sqliteclient.feeds(order.to_i).map.with_index do |x, idx|
         "#{ x['title'] } (#{x['item_count']})"
       end

@@ -65,8 +65,11 @@ class Vnews
       end
     end
 
-    # Not perfect because some feeds may have dup titles
+    # Not perfect because some feeds may have dup titles, but ok for now
     def feed_items(feed_title) 
+      # update last_viewed_at 
+      @client.query "UPDATE feeds SET last_viewed_at = now() where title = '#{e feed_title}'"
+      
       query = "SELECT items.title, guid, feed, feed_title, pub_date, word_count, starred, unread from items where items.feed_title = '#{e feed_title}' order by pub_date asc"
       @client.query(query)
     end
@@ -83,6 +86,9 @@ class Vnews
                 items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
                       where items.starred = true order by items.pub_date asc"
               else 
+                # update last_viewed_at 
+                @client.query "UPDATE feeds_folders SET last_viewed_at = now() where folder = '#{e folder}'"
+
                 "SELECT items.title, items.guid, items.feed, 
                 items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
                       inner join feeds_folders ff on  ff.feed = items.feed
@@ -95,8 +101,9 @@ class Vnews
       # mark item as read
       @client.query "UPDATE items set unread = false where guid = '#{e guid}'"
 
-      # increment the read count for the feed
+      # increment the read count for the feed 
       @client.query "UPDATE feeds set num_items_read = num_items_read + 1 where feed_url = (select feed from items where items.guid = '#{e guid}')"
+
       query = "SELECT items.* from items where guid = '#{e guid}'"
       @client.query query
     end
