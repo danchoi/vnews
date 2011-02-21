@@ -53,6 +53,15 @@ class Vnews
       end 
     end
 
+    # for item display
+    def format_long_date(d)
+      if d.nil?
+        "[no date]"
+      else
+        d.strftime("%a %m/%d/%Y at %I:%M%p %Z") 
+      end
+    end
+
     def format_item_summary(i, width)
       varwidth = width.to_i - 31
       feed_title = col i['feed_title'], varwidth * 0.25
@@ -91,8 +100,8 @@ class Vnews
     def format_item(item)
       res = <<-END
 #{item['feed']}
-
-#{item['pub_date']}, #{item['word_count']} words, #{item['feed_title']}
+#{item['feed_title']}
+#{format_long_date item['pub_date']}  #{item['word_count']} words
  
 
 #{item['title']}#{item['author'] ? ("\n" + item['author']) : '' }  
