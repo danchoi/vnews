@@ -267,6 +267,7 @@ function! s:show_adjacent_item(up, focusbufname)
   else
     normal j
   endif
+  normal zz
   call s:show_item_under_cursor(1) " TOD0 is 1 right arg?
   normal zz
   call s:focus_window(bufnr(a:focusbufname))
