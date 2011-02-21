@@ -222,8 +222,11 @@ function! s:fetch_items(selection)
   let res = system(command)
   call s:display_items(res)
   normal G
-  call s:show_item_under_cursor(0)
-  call s:focus_window(s:listbufnr)
+  call s:focus_window(s:itembufnr)
+  close
+  normal z-
+  " call s:show_item_under_cursor(0)
+  " call s:focus_window(s:listbufnr)
 endfunction
 
 func! s:get_guid(line)
