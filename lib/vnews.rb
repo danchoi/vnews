@@ -12,8 +12,15 @@ class Vnews
     # check config
     if ! Config.load_config
       puts "Missing #{Vnews::Config::CONFIGPATH}"
-      # TODO maybe generate this file
+      # generate this file
+      puts "Generating stub config file at #{Vnews::Config::CONFIGPATH}."
+      File.open(Vnews::Config::CONFIGPATH, 'w') {|f| f.write(Config.stub_config)}
+      puts "Please edit this file and then run `vnews --create-db` to create your Vnews MySQL database."
       exit
+    end
+
+    if ARGV.first == "--create-db"
+
     end
 
     vim = ENV['VMAIL_VIM'] || 'vim'

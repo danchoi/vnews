@@ -2,9 +2,13 @@ require 'vnews/sql'
 require 'yaml'
 
 class Vnews
+  def self.sql_client
+    $sql_client ||= Config.load_config
+  end
+
   module Config
     def self.generate_config
-      config = Vnews.sqlite_client.config.inject({}) do |memo, (k, v)|
+      config = Vnews.sql_client.config.inject({}) do |memo, (k, v)|
         memo[k.to_s] = v
         memo
       end
@@ -20,7 +24,28 @@ class Vnews
       out.join("\n")
     end
 
-    def self.parse_config(config)
+    def self.stub_config
+      stub = <<-END.gsub(/^ */, '')
+        host: localhost 
+        database: vnews 
+        username: root 
+        password: 
+
+        General News 
+        http://feedproxy.google.com/economist/full_print_edition
+        http://feeds.feedburner.com/TheAtlanticWire
+
+        Humor
+        http://feed.dilbert.com/dilbert/blog
+
+        Tech 
+        http://rss.slashdot.org/Slashdot/slashdot
+        http://feeds2.feedburner.com/readwriteweb
+        http://feedproxy.google.com/programmableweb
+        http://news.ycombinator.com/rss
+        http://daringfireball.net/index.xml
+        http://dailyvim.blogspot.com/feeds/posts/default
+      END
     end
 
     CONFIGPATH = "#{ENV['HOME']}/.vnewsrc"
@@ -38,16 +63,10 @@ class Vnews
       # track feeds that must be deleted
 
       # Put feeds in right folder
-      $sql_client = Sql.new(dbconfig)
-    end
-  end
-  def self.sql_client
-    if ! $sql_client 
-      Config.load_config
-    end
-    $sql_client
-  end
 
+      Sql.new(dbconfig)
+    end
+  end
 end
 
 if __FILE__ == $0
