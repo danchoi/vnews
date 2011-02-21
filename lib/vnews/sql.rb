@@ -1,7 +1,7 @@
 require 'mysql2'
 class Vnews
   class Sql
-    attr_accessor :config
+    attr_accessor :config, :client
 
     def self.shell_escape(string)
       require 'shellwords'
@@ -41,8 +41,16 @@ class Vnews
       end
     end
 
-    def delete_feed_items feed_url
+    def delete_feed_items(feed_url)
       puts @client.query("DELETE from items where feed = '#{e feed_url}'")
+    end
+
+    def delete_feed(feed_url)
+      @client.query "DELETE from feeds where feed_url = '#{e feed_url}'"
+    end
+
+    def delete_feed_folder(feed, folder)
+      @client.query "DELETE from feeds_folders where feed = '#{e feed}' and folder = '#{e folder}'"
     end
 
     def insert_item(item)
@@ -78,6 +86,11 @@ class Vnews
     def configured_folders
       folders = @client.query("SELECT distinct(folder) from feeds_folders order by folder asc")
     end
+
+    def configured_feeds_folders
+      @client.query("SELECT feed,folder from feeds_folders order by folder asc").map {|x| [x['feed'], x['folder']]}
+    end
+
 
     def feeds(order)
       if order == 0 

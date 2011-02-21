@@ -24,13 +24,19 @@ class Vnews
       dbconfig = YAML::load(top)
       puts "Creating database: #{dbconfig['database']}"
       Vnews::Sql.create_db dbconfig
-      puts "OK if everything went ok, you can start Vnews with `vnews`."
+      puts "OK if everything went ok, you can create your feeds and folders with `vnews --update`."
       exit
     end
 
+    if ARGV.first == "--update"
+      Vnews::Config.update_folders
+    end
+
+    Vnews.sql_client # loads the config
+
     vim = ENV['VMAIL_VIM'] || 'vim'
     vimscript = File.join(File.dirname(__FILE__), "vnews.vim")
-    vim_command = "#{vim} -S #{vimscript}"
+    vim_command = "#{vim} -S #{vimscript} "
     STDERR.puts vim_command
     system(vim_command)
     if vim == 'mvim'
