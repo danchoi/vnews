@@ -60,9 +60,9 @@ class Vnews
       raise
     end
 
-    def self.reload_feed(feed_url)
-      puts "Deleting feed items for #{feed_url}"
-      Vnews::SQLCLIENT.delete_feed_items feed_url
+    def self.update_feed(feed_url)
+      # puts "Deleting feed items for #{feed_url}"
+      # Vnews::SQLCLIENT.delete_feed_items feed_url
       f = Vnews::Feed.get_feed feed_url
       save_feed feed_url, f, nil
       puts "Reloaded"

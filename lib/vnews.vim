@@ -34,6 +34,17 @@ func! s:trimString(string)
   return substitute(string, '^\s\+', '', '')
 endfunc
 
+
+function! s:common_mappings()
+  nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
+  nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
+  nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
+  nnoremap <buffer> <leader>* :call <SID>toggle_star()<CR>
+  nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
+  nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
+  nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
+endfunc
+
 function! s:create_list_window()
   new list-window
   wincmd p 
@@ -56,14 +67,8 @@ function! s:create_list_window()
   noremap <silent> <buffer> <cr> :call <SID>show_item_under_cursor(0)<CR>
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
-  nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
-  nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
-  nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
-  nnoremap <buffer> <leader>* :call <SID>toggle_star()<CR>
-  nnoremap <buffer> <leader>8 :call <SID>toggle_star()<CR>
-  nnoremap <buffer> <leader># :call <SID>delete_item()<CR>
-  nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
+  call s:common_mappings()
   if !exists("g:VnewsStarredColor")
     let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"
   endif
@@ -80,15 +85,10 @@ function! s:create_item_window()
   noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
-  nnoremap <silent> <buffer> <Space> :call <SID>toggle_maximize_window()<cr>
-  nnoremap <buffer> <leader>n :call <SID>list_folders()<CR>
-  nnoremap <buffer> <leader>m :call <SID>list_feeds()<CR>
   nnoremap <buffer> <leader>o :call <SID>find_next_href_and_open()<CR>
+  " opens the linked item
   nnoremap <buffer> <leader>h :normal Gkk<CR>:call <SID>find_next_href_and_open()<CR>
-  nnoremap <buffer> <leader>*  :call <SID>toggle_star()<cr>
-  nnoremap <buffer> <leader>8  :call <SID>toggle_star()<cr>
-  nnoremap <buffer> <leader># :call <SID>focus_window(s:listbufnr)<CR>:call <SID>delete_item()<CR>
-  nnoremap <buffer> <leader>3 :call <SID>focus_window(s:listbufnr)<CR>:call <SID>delete_item()<CR>
+  call s:common_mappings()
   close
 endfunction
 
@@ -358,6 +358,7 @@ endfunction
 " DELETE ITEMS
 
 func! s:delete_item() 
+  call s:focus_window(s:listbufnr)
   let uid = s:get_guid(line('.'))
   let command = s:delete_item_command . shellescape(uid)
   let res = system(command)

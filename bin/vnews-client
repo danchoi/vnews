@@ -8,7 +8,7 @@ require 'vnews/display'
 case ARGV.first 
 when 'reload' 
   require 'vnews/feed'
-  puts Vnews::Feed.reload_feed ARGV[1]
+  puts Vnews::Feed.update_feed ARGV[1]
 
 else
   puts Vnews::Display.new.send *ARGV

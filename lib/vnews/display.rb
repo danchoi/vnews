@@ -50,7 +50,7 @@ class Vnews
     end
 
     def format_item_summary(i, width)
-      varwidth = width.to_i - 29
+      varwidth = width.to_i - 31
       feed_title = col i['feed_title'], varwidth * 0.25
       title = col i['title'], varwidth * 0.75
       word_count = i['word_count'].to_s.rjust(6)
@@ -81,7 +81,9 @@ class Vnews
 
     def format_item(item)
       res = <<-END
-#{format_date item['pub_date']}, #{item['word_count']} words, #{item['feed_title']}, #{item['feed']}
+#{item['feed']}
+
+#{format_date item['pub_date']}, #{item['word_count']} words, #{item['feed_title']}
  
 
 #{item['title']}#{item['author'] ? ("\n" + item['author']) : '' }  
