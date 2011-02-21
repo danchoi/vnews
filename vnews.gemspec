@@ -19,9 +19,11 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'feed_yamlizer', '>=0.0.6'
   s.add_dependency 'nokogiri'
+  s.add_dependency 'mysql2'
+  s.add_dependency 'feed_yamlizer', '>=0.0.6'
 
   # remember to say in readme that fmt and tidy are required
+  # TODO and in post_install note
 
 end
