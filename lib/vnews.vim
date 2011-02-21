@@ -22,6 +22,7 @@ let s:star_item_command = s:client_script . 'star_item ' " + guid star(bool)
 let s:unstar_item_command = s:client_script . 'unstar_item ' " + guid star(bool)
 let s:delete_item_command = s:client_script . 'delete_item ' " + guid
 let s:search_items_command = s:client_script . 'search_items '
+let s:cat_items_command = s:client_script . 'cat_items '
 
 let s:folder = "All"
 let s:feed = "All"
@@ -73,6 +74,7 @@ function! s:create_list_window()
   nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
+  command! -bar -nargs=0 -range VNCat :<line1>,<line2>call s:cat_items()
   call s:common_mappings()
   if !exists("g:VnewsStarredColor")
     let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"
@@ -388,6 +390,32 @@ func! s:delete_item()
   end
   redraw
   echom "Item ".uid." deleted"
+endfunc
+
+"------------------------------------------------------------------------
+" PRINT ITEMS
+
+" must be called from list window
+func! s:cat_items() range
+  let lnum = a:firstline
+  let items = []
+  while lnum <= a:lastline
+    let guid = s:get_guid(lnum)
+    call add(items, shellescape(guid))
+    let lnum += 1
+  endwhile
+  call s:focus_window(s:itembufnr)
+  only
+  let command = s:cat_items_command . join(items, ' ')
+  let res = system(command)
+  setlocal modifiable
+  silent 1,$delete
+  silent put =res
+  silent 1delete
+  silent normal 1Gjk
+  setlocal nomodifiable
+  redraw
+  echom "Concatenated ".len(items)."item".(len(items) == 1 ? '' : 's')
 endfunc
 
 

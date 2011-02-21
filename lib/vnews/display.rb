@@ -136,7 +136,6 @@ class Vnews
       @sqliteclient.delete_item guid
     end
 
-
     def search_items(window_width, term)
       res = @sqliteclient.search_items(term).map do |x|
         format_item_summary x, window_width
@@ -144,6 +143,11 @@ class Vnews
       res.empty? ? "No matches" : res
     end
 
+    def cat_items(*guids)
+      text = guids.map do |guid|
+        show_item(guid, 0) 
+      end.join( "\n+" + ('-' * 78) + "+\n" )
+    end
   end
 
 end

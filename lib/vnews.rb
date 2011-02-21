@@ -24,7 +24,7 @@ class Vnews
       dbconfig = YAML::load(top)
       puts "Creating database: #{dbconfig['database']}"
       Vnews::Sql.create_db dbconfig
-      puts "OK if everything went ok, you can create your feeds and folders with `vnews --update`."
+      puts "OK if everything went ok, you can create your feeds and folders with `vnews -u`."
       exit
     end
 
@@ -39,7 +39,7 @@ class Vnews
       puts "Done."
     end
 
-    if ARGV.first == "--update"
+    if ['--update', '-u'].include?(ARGV.first)
       Vnews::Config.update_folders
     end
 
