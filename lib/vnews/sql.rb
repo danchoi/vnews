@@ -153,5 +153,4 @@ class Vnews
 
   end
 
-  SQLCLIENT = Sql.new() # TODO inject config here
 end

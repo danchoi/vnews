@@ -1,31 +1,31 @@
 require 'vnews/version'
+require 'vnews/config'
 require 'vnews/feed'
 require 'logger'
 require 'drb'
 
 class Vnews
-  class << self
+  
+  def self.start
+    puts "Starting vnews #{Vnews::VERSION}"
 
-    def start
-      puts "starting vnews #{Vnews::VERSION}"
-      vim = ENV['VMAIL_VIM'] || 'vim'
-
-      # TODO load a feed list file somewhere
-
-      vimscript = File.expand_path("../../vnews.vim", __FILE__)
-
-      vim_command = "#{vim} -S #{vimscript}"
-
-      STDERR.puts vim_command
-
-      system(vim_command)
-
-      if vim == 'mvim'
-        DRb.thread.join
-      end
+    # check config
+    if ! Config.load_config
+      puts "Missing #{Vnews::Config::CONFIGPATH}"
+      # TODO maybe generate this file
+      exit
     end
 
+    vim = ENV['VMAIL_VIM'] || 'vim'
+    vimscript = File.join(File.dirname(__FILE__), "vnews.vim")
+    vim_command = "#{vim} -S #{vimscript}"
+    STDERR.puts vim_command
+    system(vim_command)
+    if vim == 'mvim'
+      DRb.thread.join
+    end
   end
+
 end
 
 

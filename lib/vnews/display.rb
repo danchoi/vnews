@@ -1,4 +1,4 @@
-require 'vnews/sql'
+require 'vnews/config'
 require 'yaml'
 require 'date'
 
@@ -6,7 +6,7 @@ class Vnews
   class Display
 
     def initialize
-      @sqliteclient = Vnews::SQLCLIENT
+      @sqliteclient = Vnews.sql_client
       @window_width = 140
     end
 

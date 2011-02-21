@@ -12,7 +12,7 @@ class Vnews
         puts "Updating folder: #{folder.inspect}"
         threads = []
         feeds = []
-        Vnews::SQLCLIENT.feeds_in_folder(folder.strip).each do |feed|
+        Vnews.sql_client.feeds_in_folder(folder.strip).each do |feed|
           threads << Thread.new do 
             feeds << Vnews::Feed.fetch_feed(feed, folder)
           end

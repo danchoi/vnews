@@ -7,7 +7,7 @@ class Vnews
     CONCURRENCY = 18
 
     def self.import(opml)
-      sqlclient = Vnews::SQLCLIENT
+      sqlclient = Vnews.sql_client
       doc = Nokogiri::XML.parse(opml) 
       feeds = []
       doc.xpath('/opml/body/outline').each_slice(CONCURRENCY) do |xs|

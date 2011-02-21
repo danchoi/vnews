@@ -2,7 +2,7 @@
 require 'open-uri'
 require 'feed_yamlizer'
 require 'vnews/autodiscoverer'
-require 'vnews/sql'
+require 'vnews/config'
 
 class Vnews
   class Feed
@@ -46,13 +46,13 @@ class Vnews
     def self.save_feed(feed_url, f, folder=nil)
       # if no folder, we're just updating a feed
       if folder
-        Vnews::SQLCLIENT.insert_feed(f[:meta][:title], feed_url, f[:meta][:link], folder)
+        Vnews.sql_client.insert_feed(f[:meta][:title], feed_url, f[:meta][:link], folder)
       end
       f[:items].each do |item|
         if item[:guid].nil? || item[:guid].strip == ''
           item[:guid] = [f[:meta][:link], f[:link]].join(":::")
         end
-        Vnews::SQLCLIENT.insert_item item.merge(:feed => feed_url, :feed_title => f[:meta][:title])
+        Vnews.sql_client.insert_item item.merge(:feed => feed_url, :feed_title => f[:meta][:title])
         $stderr.print "."
       end
     rescue
@@ -64,10 +64,10 @@ class Vnews
       require 'vnews/display'
       feed_title = Vnews::Display.strip_item_count(feed_title)
       puts "Updating feed: #{feed_title}"
-      feed_url = Vnews::SQLCLIENT.feed_by_title feed_title
+      feed_url = Vnews.sql_client.feed_by_title feed_title
       puts "Fetching data from feed url: #{feed_url}"
       # puts "Deleting feed items for #{feed_url}"
-      # Vnews::SQLCLIENT.delete_feed_items feed_url
+      # Vnews.sql_client.delete_feed_items feed_url
       f = Vnews::Feed.get_feed feed_url
       save_feed feed_url, f, nil
       puts "\nFeed updated"
