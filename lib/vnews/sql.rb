@@ -53,10 +53,16 @@ class Vnews
     end
 
     def feeds(order)
-      @client.query("SELECT feeds.*, count(*) as item_count from feeds 
-                    inner join items i on i.feed = feeds.feed_url
-                    group by feeds.feed_url
-                    order by #{order}") 
+      if order == 0 
+        # "feeds.title asc" 
+        @client.query("SELECT feeds.*, count(*) as item_count from feeds 
+                      inner join items i on i.feed = feeds.feed_url
+                      group by feeds.feed_url
+                      order by feeds.title asc") 
+      else
+        @client.query("SELECT feeds.*, feeds.num_items_read as item_count from feeds 
+                      order by num_items_read desc, title asc") 
+      end
     end
 
     # Not perfect because some feeds may have dup titles
@@ -88,6 +94,9 @@ class Vnews
     def show_item(guid)
       # mark item as read
       @client.query "UPDATE items set unread = false where guid = '#{e guid}'"
+
+      # increment the read count for the feed
+      @client.query "UPDATE feeds set num_items_read = num_items_read + 1 where feed_url = (select feed from items where items.guid = '#{e guid}')"
       query = "SELECT items.* from items where guid = '#{e guid}'"
       @client.query query
     end
