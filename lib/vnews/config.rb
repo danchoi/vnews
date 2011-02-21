@@ -49,22 +49,23 @@ class Vnews
     end
 
     CONFIGPATH = "#{ENV['HOME']}/.vnewsrc"
+
     def self.load_config
       if ! File.exists?(File.expand_path(CONFIGPATH))
         return false
       end
+      return if $sql_client
+      
       f = File.read(File.expand_path(CONFIGPATH))
-      # split into two parts
       top, bottom = f.split(/^\s*$/,2)
       dbconfig = YAML::load top
-      # parse database config
       puts "Loaded database config for #{dbconfig['username']}@#{dbconfig['database']} at #{dbconfig['host']}"
 
-      # track feeds that must be deleted
+      # TODO track feeds that must be deleted
 
       # Put feeds in right folder
 
-      Sql.new(dbconfig)
+      $sql_client = Sql.new(dbconfig)
     end
   end
 end

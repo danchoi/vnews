@@ -2,11 +2,30 @@ require 'mysql2'
 class Vnews
   class Sql
     attr_accessor :config
-    def initialize(config = {})
+
+    def self.shell_escape(string)
+      require 'shellwords'
+      Shellwords.shellescape(string)
+    end
+
+    def self.create_db(config)
+      config = symbolize_config(config)
+      create_sql = File.join(File.dirname(__FILE__), '..', 'create.sql')
+      passwordarg = config[:password] ? ("-p #{shell_escape(config[:password])}") : ''
+      puts `mysqladmin -h #{shell_escape config[:host]} -u #{shell_escape config[:username]} #{passwordarg} create #{shell_escape config[:database]}`
+      puts `mysql -h #{shell_escape config[:host]} -D #{shell_escape config[:database]} -u #{shell_escape config[:username]} #{passwordarg} < #{create_sql}`
+    end
+
+    def self.symbolize_config(config)
       config = config.inject({}) do |memo, (key, value)|
         memo[key.to_sym] = value
         memo
       end
+      config
+    end
+
+    def initialize(config = {})
+      config = Vnews::Sql.symbolize_config(config)
       defaults = {:host => 'localhost',  :database => 'vnews', :username => 'root', :password => nil}
       @config = defaults.update(config)
       @client = Mysql2::Client.new @config
