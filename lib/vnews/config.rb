@@ -20,8 +20,16 @@ class Vnews
       out.join("\n")
     end
 
+    def self.parse_config(config)
+    end
 
     def self.load_config
+      config_file_locations = "#{ENV['HOME']}/.vnewsrc"
+      if ! File.exists?(File.expand_path(config_file_locations))
+        puts "Missing ~/.vnewsrc"
+        exit(1)
+      end
+
       # parse database config
 
       # track feeds that must be deleted
