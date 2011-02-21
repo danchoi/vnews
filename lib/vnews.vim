@@ -68,10 +68,10 @@ function! s:create_list_window()
   let s:listbufnr = bufnr('')
   let s:listbufname = bufname('')
   setlocal statusline=%!VnewsStatusLine()
-  noremap <silent> <buffer> <cr> :call <SID>show_item_under_cursor(1)<CR>
-  noremap <silent> <buffer> <c-l> :call <SID>show_item_under_cursor(0)<CR>
-  noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
-  noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
+  nnoremap <silent> <buffer> <cr> :call <SID>show_item_under_cursor(1)<CR>
+  nnoremap <silent> <buffer> <c-l> :call <SID>show_item_under_cursor(1)<CR>:wincmd p<CR>
+  nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
+  nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
   call s:common_mappings()
   if !exists("g:VnewsStarredColor")
@@ -86,9 +86,9 @@ function! s:create_item_window()
   setlocal modifiable 
   setlocal buftype=nofile
   let s:itembufnr = bufnr('%')
-  noremap <silent> <buffer> <cr> <C-W>=<C-W>p
-  noremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
-  noremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
+  nnoremap <silent> <buffer> <cr> <C-W>=<C-W>p
+  nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
+  nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
   nnoremap <buffer> <leader>o :call <SID>find_next_href_and_open()<CR>
   " opens the linked item
