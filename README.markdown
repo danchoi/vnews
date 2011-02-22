@@ -166,7 +166,7 @@ Unread items are marked with a `+` symbol.
 
 You can star interesting feed items by using `,*` or `,8` (both use the
 same keys, the only difference being the SHIFT key). Starred items are
-colored green and made available in a specially `Starred` folder.
+colored green and made available in the special `Starred` folder.
 
 Starred items don't get deleted when you remove the feed they came
 from from your `.vnewsrc` configuration file. 
