@@ -30,8 +30,12 @@ end
 desc "build and push website"
 task :web => :build_webpage do
   puts "Building and pushing website"
-  `scp website/vnews.html zoe2@instantwatcher.com:~/danielchoi.com/public/software/`
-  `scp -r website/images-vnews zoe2@instantwatcher.com:~/danielchoi.com/public/software/`
+  Dir.chdir "../project-webpages" do
+    `scp out/vnews.html zoe2@instantwatcher.com:~/danielchoi.com/public/software/`
+    `rsync -avz out/images-vnews zoe2@instantwatcher.com:~/danielchoi.com/public/software/`
+    `rsync -avz out/stylesheets zoe2@instantwatcher.com:~/danielchoi.com/public/software/`
+    `rsync -avz out/lightbox2 zoe2@instantwatcher.com:~/danielchoi.com/public/software/`
+  end
   `open http://danielchoi.com/software/vnews.html`
 end
 
