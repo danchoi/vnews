@@ -132,8 +132,10 @@ class Vnews
       @sqliteclient.star_item guid, false
     end
 
-    def delete_item(guid)
-      @sqliteclient.delete_item guid
+    def delete_items(*guids)
+      guids.each do |guid|
+        @sqliteclient.delete_item guid
+      end
     end
 
     def search_items(window_width, term)

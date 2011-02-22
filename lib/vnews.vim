@@ -19,7 +19,7 @@ let s:list_feed_items_command = s:client_script . 'feed_items '
 let s:show_item_command = s:client_script . 'show_item '
 let s:star_item_command = s:client_script . 'star_item ' " + guid star(bool)
 let s:unstar_item_command = s:client_script . 'unstar_item ' " + guid star(bool)
-let s:delete_item_command = s:client_script . 'delete_item ' " + guid
+let s:delete_items_command = s:client_script . 'delete_items ' " + guids
 let s:search_items_command = s:client_script . 'search_items '
 let s:cat_items_command = s:client_script . 'cat_items '
 
@@ -378,20 +378,21 @@ endfunction
 "------------------------------------------------------------------------
 " DELETE ITEMS
 
-func! s:delete_item() 
+func! s:delete_item()  range
   call s:focus_window(s:listbufnr)
-  let uid = s:get_guid(line('.'))
-  let command = s:delete_item_command . shellescape(uid)
-  let res = system(command)
+  let lnum = a:firstline
+  let items = []
+  while lnum <= a:lastline
+    let guid = s:get_guid(lnum)
+    call add(items, shellescape(guid))
+    let lnum += 1
+  endwhile
+  let command = s:delete_items_command . join(items, ' ')
+  call system(command)
   setlocal modifiable
-  exec "silent " . line('.') . "delete"
+  exec "silent " . a:firstline . "," . a:lastline . "delete"
   setlocal nomodifiable
-  if winnr("$") > 1
-    wincmd p 
-    close
-  end
   redraw
-  echom "Item ".uid." deleted"
 endfunc
 
 "------------------------------------------------------------------------
