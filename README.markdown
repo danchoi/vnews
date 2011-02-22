@@ -253,7 +253,7 @@ folder by pressing `u`.
 
 ## OPML import
 
-If you want to import an OPML list of your feed subscriptions into
+If you want to import an OPML export of your feed subscriptions into
 Vnews, use this command:
 
     vnews --opml [file]
