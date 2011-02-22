@@ -11,8 +11,7 @@ let mapleader = ','
 highlight VnewsSearchTerm ctermbg=green guibg=green
 
 
-"let s:client_script = 'vnews-client '
-let s:client_script = 'bin/vnews-client '
+let s:client_script = 'vnews-client '
 let s:list_folders_command = s:client_script . 'folders '
 let s:list_feeds_command = s:client_script . 'feeds '
 let s:list_folder_items_command = s:client_script . 'folder_items ' 

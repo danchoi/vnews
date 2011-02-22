@@ -44,7 +44,7 @@ task :build_webpage do
   `cp README.markdown ../project-webpages/src/vnews.README.markdown`
   Dir.chdir "../project-webpages" do
     puts `ruby gen.rb vnews #{Vnews::VERSION}`
-    `open out/vnews.html`
+    #`open out/vnews.html`
   end
 end
 
