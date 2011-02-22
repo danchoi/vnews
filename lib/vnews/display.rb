@@ -63,7 +63,7 @@ class Vnews
     end
 
     def format_item_summary(i, width)
-      varwidth = width.to_i - 32
+      varwidth = width.to_i - 35
       feed_title = col i['feed_title'], varwidth * 0.25
       title = col i['title'], varwidth * 0.75
       word_count = i['word_count'].to_s.rjust(6)
