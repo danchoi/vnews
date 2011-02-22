@@ -97,8 +97,8 @@ class Vnews
     def feeds(order)
       if order == 0 
         # "feeds.title asc" 
-        @client.query("SELECT feeds.*, count(*) as item_count from feeds 
-                      inner join items i on i.feed = feeds.feed_url
+        @client.query("SELECT feeds.*, count(i.unread) as item_count from feeds 
+                      left outer join items i on i.feed = feeds.feed_url
                       where i.unread = true
                       group by feeds.feed_url
                       order by feeds.title asc") 
@@ -148,7 +148,7 @@ class Vnews
 
                 "SELECT items.title, items.guid, items.feed, 
                 items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
-                      inner join feeds_folders ff on  ff.feed = items.feed
+                      left join feeds_folders ff on  ff.feed = items.feed
                       where ff.folder = '#{e folder}' order by items.pub_date asc"
               end
       @client.query query
@@ -160,7 +160,7 @@ class Vnews
 
       if inc_read_count
         # increment the read count for the feed 
-        @client.query "UPDATE feeds set num_items_read = num_items_read + 1 where feed_url = (select feed from items where items.guid = '#{e guid}')"
+        @client.query "UPDATE feeds set num_items_read = num_items_read + 1 where feed_url = (select feed from items where items.guid = '#{e guid}' limit 1)"
       end
 
       query = "SELECT items.* from items where guid = '#{e guid}'"

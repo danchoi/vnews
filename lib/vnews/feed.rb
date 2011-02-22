@@ -41,10 +41,10 @@ class Vnews
         Vnews.sql_client.insert_feed(f[:meta][:title], feed_url, f[:meta][:link], folder)
       end
       f[:items].each do |item|
-        if item[:guid].nil? || item[:guid].strip == ''
-          item[:guid] = [f[:meta][:link], item[:link]].join("+")
-        end
         item[:pub_date] ||= Time.now
+        if item[:guid].nil? || item[:guid].strip == ''
+          item[:guid] = [ f[:meta][:link], item[:link], item[:pub_date] ].join("+")
+        end
         Vnews.sql_client.insert_item item.merge(:feed => feed_url, :feed_title => f[:meta][:title])
         $stderr.print "."
       end
