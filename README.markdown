@@ -15,6 +15,7 @@ web-based. Here are some of Vnews's advantages:
 Vnews uses MySQL to store your feed data locally. It uses MySQL's MyISAM
 tables to provide natural-language full-text search capability.
 
+Vnews is free and open-source.
 
 ## Prerequisites
 
