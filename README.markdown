@@ -142,7 +142,7 @@ positioning commands.
 * `,m` calls up the feed selection window, sorted alphabetically
 * `,M` calls up the feed selection window, sorted by the number of times you read an item from each feed
 
-For all of the commands, you'll see an autocomplete window appear at the
+For all of these commands, you'll see an autocomplete window appear at the
 top.  The standard Vim autocomplete keystrokes apply:
 
 * `C-p` and `C-n` move you up and down the match list
