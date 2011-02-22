@@ -25,9 +25,9 @@ class Vnews
 ---
 Usage: vnews 
 
-When you run Vnews for the first time, a .vnewsrc stuf file will be
-generated in your home directory.  You must edit this file to match
-your MySQL settings, and then run `vnews --create-db`.
+When you run Vnews for the first time, a .vnewsrc configuration file will be
+generated in your home directory.  You must edit this file to match your MySQL
+settings, and then run `vnews --create-db`.
 
 After that you can run `vnews` to read your feeds.
 
@@ -38,8 +38,7 @@ Specific options:
   -v, --version          Show version
   -h, --help             Show this message
 
-Please visit http://danielchoi.com/software/vnews.html for more
-help.
+Please visit http://danielchoi.com/software/vnews.html for more help.
 
 --- 
         END
