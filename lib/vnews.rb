@@ -33,8 +33,9 @@ After that you can run `vnews` to read your feeds.
 
 Specific options:
 
-  -u, --update           Update all feeds before starting vnews
+  -u, --update           Update all feeds and folders before starting vnews
   --opml [opml file]     Import feeds from an OPML file
+  --create-db            Create MySQL database configured in .vnewrc 
   -v, --version          Show version
   -h, --help             Show this message
 
