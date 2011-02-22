@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'nokogiri'
   s.add_dependency 'mysql2'
-  s.add_dependency 'feed_yamlizer', '>=0.0.6'
+  s.add_dependency 'feed_yamlizer', '>=0.0.7'
 
   # remember to say in readme that fmt and tidy are required
   # TODO and in post_install note
