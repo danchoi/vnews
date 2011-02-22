@@ -122,11 +122,7 @@ just run `vnews`.
 
 ## Basic navigation
 
-To start Vnews, use `vnews -u` to update all your feeds before starting
-your Vnews session. To simply start the session without going through
-the update process, use the simple `vnews` command.
-
-At this point, you should see the feed items for all your feeds
+After you start Vnews, you should see the feed items for all your feeds
 in one consolidated list.
 
 * `j` moves up the item list
