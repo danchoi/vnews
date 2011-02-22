@@ -7,7 +7,6 @@ require 'drb'
 class Vnews
   
   def self.start
-    puts "Starting vnews #{Vnews::VERSION}"
 
     if ! File.exists?(File.expand_path(Vnews::Config::CONFIGPATH))
       puts "Missing #{Vnews::Config::CONFIGPATH}"
@@ -22,27 +21,27 @@ class Vnews
       puts "vnews #{Vnews::VERSION}"
       puts "by Daniel Choi dhchoi@gmail.com"
       puts
-      puts <<-END.gsub(/^\s*\b/, '')
-        ---
-        Usage: vnews 
+      puts <<-END
+---
+Usage: vnews 
 
-        When you run Vnews for the first time, a .vnewsrc stuf file will be
-        generated in your home directory.  You must edit this file to match
-        your MySQL settings, and then run `vnews --create-db`.
+When you run Vnews for the first time, a .vnewsrc stuf file will be
+generated in your home directory.  You must edit this file to match
+your MySQL settings, and then run `vnews --create-db`.
 
-        After that you can run `vnews` to read your feeds.
+After that you can run `vnews` to read your feeds.
 
-        Specific options:
+Specific options:
 
-        -u, --update                     Update all feeds before starting vnews
-        --opml [opml file]               Import feeds from an OPML file
-        -v, --version                    Show version
-        -h, --help                       Show this message
+  -u, --update           Update all feeds before starting vnews
+  --opml [opml file]     Import feeds from an OPML file
+  -v, --version          Show version
+  -h, --help             Show this message
 
-        Please visit http://danielchoi.com/software/vnews.html for more
-        help.
-        
-        --- 
+Please visit http://danielchoi.com/software/vnews.html for more
+help.
+
+--- 
         END
       exit
     end
@@ -73,6 +72,7 @@ class Vnews
       Vnews::Config.update_folders
     end
 
+    puts "Starting vnews #{Vnews::VERSION}"
     Vnews.sql_client # loads the config
 
     vim = ENV['VMAIL_VIM'] || 'vim'
