@@ -50,6 +50,7 @@ function! s:common_mappings()
   nnoremap <buffer> <leader>u :call <SID>update_feed()<CR>
   nnoremap <silent> <leader>? :call <SID>show_help()<cr>
   command! -bar -nargs=0 VNUpdateFeed  :call <SID>update_feed()
+  command! -bar -nargs=1 VNSearch :call s:search_items(<f-args>)
 endfunc
 
 function! s:create_list_window()
@@ -433,9 +434,13 @@ func! s:search_items(term)
   " show item for top match
   normal gg
   call s:show_item_under_cursor(0)
-  call matchadd("VnewsSearchTerm", '\c' . a:term )
+  for word in split(a:term, '\s\+') 
+    call matchadd("VnewsSearchTerm", '\c' . word)
+  endfor
   call s:focus_window(s:listbufnr)
-  call matchadd("VnewsSearchTerm", '\c' . a:term )
+  for word in split(a:term, '\s\+') 
+    call matchadd("VnewsSearchTerm", '\c' . word)
+  endfor
 endfunc
 
 "------------------------------------------------------------------------
@@ -467,8 +472,6 @@ func! s:show_help()
   let command = g:Vnews#browser_command . ' ' . shellescape('http://danielchoi.com/software/vnews.html')
   call system(command)
 endfunc
-
-command! -bar -nargs=1 VNSearch :call s:search_items(<f-args>)
 
 
 call s:create_list_window()
