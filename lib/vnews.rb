@@ -41,6 +41,7 @@ After that you can run `vnews` to read your feeds.
 Specific options:
 
   -u, --update           Update all feeds and folders before starting vnews
+  -U                     Update all feeds and folders without starting vnews session
   --opml [opml file]     Import feeds from an OPML file
   --create-db            Create MySQL database configured in .vnewrc 
   -v, --version          Show version
@@ -75,14 +76,17 @@ Please visit http://danielchoi.com/software/vnews.html for more help.
       puts "Done."
     end
 
-    if ['--update', '-u'].include?(ARGV.first)
+    if ['--update', '-u', '-U'].include?(ARGV.first)
       Vnews::Config.update_folders
+      if ARGV.first == '-U'
+        exit
+      end
     end
 
     puts "Starting vnews #{Vnews::VERSION}"
     Vnews.sql_client # loads the config
 
-    vim = ENV['VMAIL_VIM'] || 'vim'
+    vim = ENV['VNEWS_VIM'] || 'vim'
     vimscript = File.join(File.dirname(__FILE__), "vnews.vim")
     vim_command = "#{vim} -S #{vimscript} "
     STDERR.puts vim_command
