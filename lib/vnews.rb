@@ -18,6 +18,36 @@ class Vnews
       exit
     end
 
+    if ['--version', '-v', "--help", "-h"].include?(ARGV.first)
+      puts "vnews #{Vnews::VERSION}"
+      puts "by Daniel Choi dhchoi@gmail.com"
+      puts
+      puts <<-END.gsub(/^\s*\b/, '')
+        ---
+        Usage: vnews 
+
+        When you run Vnews for the first time, a .vnewsrc stuf file will be
+        generated in your home directory.  You must edit this file to match
+        your MySQL settings, and then run `vnews --create-db`.
+
+        After that you can run `vnews` to read your feeds.
+
+        Specific options:
+
+        -u, --update                     Update all feeds before starting vnews
+        --opml [opml file]               Import feeds from an OPML file
+        -v, --version                    Show version
+        -h, --help                       Show this message
+
+        Please visit http://danielchoi.com/software/vnews.html for more
+        help.
+        
+        --- 
+        END
+      exit
+    end
+
+
     if ARGV.first == "--create-db"
       c = File.read(Vnews::Config::CONFIGPATH) 
       top, bottom = c.split(/^\s*$/,2)
