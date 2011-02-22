@@ -183,7 +183,7 @@ backlog of items in a feed or folder.  To delete a range of items, you
 can either of these methods:
 
 * make a selection of rows in visual mode and type `:VNDelete`
-* specify a line number range with the command: `:{range}VNDelete`
+* specify a line number range with the command: `:[range]VNDelete`
 
 See `:help 10.3` to learn how to specify command line ranges.
 
@@ -211,10 +211,19 @@ session using `elinks` or whatever browser you set as your
 `g:netrw_http_cmd`.  See `:help netrw` for more information.
 
 
+## Searching your feeds
+
+* `:VNSearch [term]` searches your feeds for items matching `[term]`
+
+
+You can use the abbreviation `:VNS`. If there are matches, you'll see
+the matching words color-highlighted. 
+
+
 ## Concatenating feed items
 
 * `:VNConcat` with a visual selection
-* `:{range}VNConcat`
+* `:[range]VNConcat`
 
 These commands let you concatenate feed items into a single, continuous
 text document for printing or more leisurely reading.
@@ -223,7 +232,6 @@ See `:help 10.3` to learn how to specify command line ranges.
 
 
 ## Updating your feeds
-
 
 Starting vnews with 
 
