@@ -42,8 +42,9 @@ class Vnews
       end
       f[:items].each do |item|
         if item[:guid].nil? || item[:guid].strip == ''
-          item[:guid] = [f[:meta][:link], f[:link]].join(":::")
+          item[:guid] = [f[:meta][:link], item[:link]].join("+")
         end
+        item[:pub_date] ||= Time.now
         Vnews.sql_client.insert_item item.merge(:feed => feed_url, :feed_title => f[:meta][:title])
         $stderr.print "."
       end
