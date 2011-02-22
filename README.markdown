@@ -9,7 +9,7 @@ There are lots of newsfeed readers out there, both desktop and
 web-based. Here are some of Vnews's advantages: 
 
 * minimizes distractions; everything is rendered as plain text and pure content; images and ads are not displayed
-* makes it easy to navigate your entire feed collection using efficient keystroke commands
+* makes it easy to navigate your entire feed collection using efficient keystrokes 
 * makes it easy to copy, append, or pipe text from your feeds to whatever file or program you want
 
 Vnews uses MySQL to store your feed data locally. It uses MySQL's MyISAM
@@ -71,7 +71,7 @@ You must edit this file to match your MySQL settings, and then run
 to generate the MySQL database that will store your feed data. Leave
 `password:` blank if you don't use a MySQL password.
 
-To use MacVim as your Vnews Vim engine, you can run soywiki like this
+To use MacVim as your Vnews Vim engine, you can run vnews like this
 
     VNEWS_VIM=mvim vnews
 
@@ -199,7 +199,7 @@ Web hyperlinks  are the URLs that begin with http:// or https://.
 
 Under the covers, Vnews uses the command `gnome-open` or `open` to
 launch your external web browser. This should cover Linux Gnome desktop
-and OS X users. You can change the command SoyWiki uses to open a
+and OS X users. You can change the command Vnews uses to open a
 hyperlink by adding this to your `~/.vimrc`:
 
     let g:Vnews#browser_command = "your browser command here"
@@ -255,6 +255,28 @@ subscriptions to an OPML file.
 
 [export-tutorial]:http://www.clipotech.com/2007/06/opml-export-in-google-reader.html
 
+
+## Getting help
+
+Typing `,?` will open the help webpage in a browser.
+
+
+## Bug reports and feature requests
+
+Vnews is very new, so there are kinks and bugs to iron out and lot of
+desirable features to add.  If you have a bug to report or a good feature to
+suggest, please file it on the [issue tracker][1].  That will help a lot.
+
+[1]:https://github.com/danchoi/vnews/issues
+
+You can also join the [Google Group][group] and comment there.
+
+[group]:http://groups.google.com/group/vnews-users?msg=new&lnk=gcis
+
+## How to contact the developer
+
+My name is Daniel Choi. I am based in Cambridge, Massachusetts, USA, and you
+can email me at dhchoi {at} gmail.com.  
 
 
 

@@ -49,6 +49,7 @@ function! s:common_mappings()
   nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
   nnoremap <buffer> u :call <SID>update_feed()<CR>
   nnoremap <buffer> <leader>u :call <SID>update_feed()<CR>
+  nnoremap <silent> <leader>? :call <SID>show_help()<cr>
   command! -bar -nargs=0 VNUpdateFeed  :call <SID>update_feed()
 endfunc
 
@@ -459,6 +460,13 @@ func! s:update_feed()
   redraw!
 endfunc
 
+
+" -------------------------------------------------------------------------------- 
+"  HELP
+func! s:show_help()
+  let command = g:Vnews#browser_command . ' ' . shellescape('http://danielchoi.com/software/vnews.html')
+  call system(command)
+endfunc
 
 command! -bar -nargs=1 VNSearch :call s:search_items(<f-args>)
 
