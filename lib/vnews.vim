@@ -426,7 +426,6 @@ endfunc
 "------------------------------------------------------------------------
 " SEARCH
 func! s:search_items(term)
-  call clearmatches()
   call s:focus_window(s:listbufnr)
   let command = s:search_items_command . winwidth(0) . ' ' . shellescape(a:term)
   let res = system(command)
@@ -434,10 +433,13 @@ func! s:search_items(term)
   " show item for top match
   normal gg
   call s:show_item_under_cursor(0)
+  " item window will be focused
+  call clearmatches()
   for word in split(a:term, '\s\+') 
     call matchadd("VnewsSearchTerm", '\c' . word)
   endfor
   call s:focus_window(s:listbufnr)
+  call clearmatches()
   for word in split(a:term, '\s\+') 
     call matchadd("VnewsSearchTerm", '\c' . word)
   endfor
