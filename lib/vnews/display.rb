@@ -67,7 +67,7 @@ class Vnews
       feed_title = col i['feed_title'], varwidth * 0.25
       title = col i['title'], varwidth * 0.75
       word_count = i['word_count'].to_s.rjust(6)
-      date = format_date(i['pub_date']).rjust(7) 
+      date = format_date(i['pub_date']).rjust(8) 
       spacer = " " * 20 # to push guid all the way off screen
       guid = i['guid']
 
