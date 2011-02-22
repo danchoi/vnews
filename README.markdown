@@ -71,13 +71,6 @@ You must edit this file to match your MySQL settings, and then run
 to generate the MySQL database that will store your feed data. Leave
 `password:` blank if you don't use a MySQL password.
 
-To use MacVim as your Vnews Vim engine, you can run vnews like this
-
-    VNEWS_VIM=mvim vnews
-
-or you can `export VNEWS_VIM=mvim` in your `~/.bash_profile` and then
-just run `vnews`.
-
 ## Configuring your feeds
 
 To configure your feeds, edit the bottom part of the `.vnewsrc` file.
@@ -113,6 +106,19 @@ removing feeds). Then Vnews will update all your feeds and start a Vnews
 session.  If you don't want to start a Vnews session (e.g. if you want
 to run this as a cron job), use `vnews -U` instead.
 
+## Starting Vnews
+
+    vnews
+
+will start a Vnews session. `vnews -u` will update all your feeds and
+then start a session.
+
+To use MacVim as your Vnews Vim engine, you can run vnews like this
+
+    VNEWS_VIM=mvim vnews
+
+or you can `export VNEWS_VIM=mvim` in your `~/.bash_profile` and then
+just run `vnews`.
 
 ## Basic navigation
 
