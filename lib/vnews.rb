@@ -8,6 +8,13 @@ class Vnews
   
   def self.start
 
+    ["tidy", "fmt"].each do |x|
+      if `which #{x}` == ''
+        puts "Before you can run Vnews, you need to install #{x}."
+        exit
+      end
+    end
+
     if ! File.exists?(File.expand_path(Vnews::Config::CONFIGPATH))
       puts "Missing #{Vnews::Config::CONFIGPATH}"
       # generate this file
