@@ -245,6 +245,10 @@ current feed, type `:%VNConcat`.
 
 See `:help 10.3` to learn how to specify command line ranges.
 
+You can pipe out the output of `:VNConcat` to `a2ps` for printing:
+
+    :w !a2ps
+
 
 
 ## Updating your feeds
