@@ -156,7 +156,7 @@ endfunction
 
 function! CompleteFunction(findstart, base)
   if a:findstart
-    let start = len(s:prompt) + 1
+    let start = len(s:prompt) 
     return start
   else
     let base = s:trimString(a:base)
