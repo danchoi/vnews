@@ -176,7 +176,7 @@ class Vnews
     end
 
     def search_items(term)
-      query = "select * from items where match(title, text) against('#{e term}')"
+      query = "select * from items where match(title, text) against('#{e term}') order by pub_date asc"
       @client.query query
     end
 
