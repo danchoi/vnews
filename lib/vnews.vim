@@ -188,7 +188,7 @@ func! s:list_feeds(popular_first)
   " default is alphabetical 
   " 1 means order by popular_first
   let res = system(s:list_feeds_command . " " . a:popular_first) 
-  let promptsuffix =  a:popular_first ? "(num of item views)" : "(num of unread items)"
+  let promptsuffix =  a:popular_first ? "(num of item views)" : "(num of items)"
   let feeds = split(res, "\n")
   if len(feeds) == 0
     echom "There are no feeds."
