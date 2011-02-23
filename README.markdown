@@ -265,7 +265,7 @@ folder by pressing `u`.
 ## Updating your feeds with cron
 
 This cron task will update your feeds every hour, at 1 minute past the
-hour, and log the output to `vnews.log`:
+hour:
 
     1 * * * * (bash -l -c 'rvm use 1.9.2 && vnews -U') > /dev/null 2>&1
 
