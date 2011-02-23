@@ -103,12 +103,12 @@ function! s:create_item_window()
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
   nnoremap <buffer> <leader>o :call <SID>find_next_href_and_open()<CR>
   " opens the linked item
-  nnoremap <buffer> <leader>h :normal Gkk<CR>:call <SID>find_next_href_and_open()<CR>
+  nnoremap <buffer> <leader>h :normal Gk<CR>:call <SID>find_next_href_and_open()<CR>
   call s:common_mappings()
 
   " for netrw vertical split
   nnoremap <buffer> <leader>O :exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
-  nnoremap <buffer> <leader>H :normal Ckk<CR>:exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
+  nnoremap <buffer> <leader>H :normal Gk<CR>:exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
   close
 endfunction
 
