@@ -11,9 +11,10 @@ class Vnews
       doc = Nokogiri::XML.parse(opml) 
       feeds = []
       doc.xpath('/opml/body/outline').each_slice(CONCURRENCY) do |xs|
-        threads = []
+        pool = ThreadPool.new(10)
+        puts "Using thread pool size of 10"
         xs.each do |n|
-          threads << Thread.new do 
+          pool.process do 
             if n.attributes['xmlUrl']
               feeds << Vnews::Feed.fetch_feed(n.attributes['xmlUrl'].to_s)
             else
@@ -25,7 +26,6 @@ class Vnews
             end
           end
         end
-        threads.each {|t| t.join}
       end
 
       $stderr.puts "Making database records"

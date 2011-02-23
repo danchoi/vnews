@@ -1,5 +1,6 @@
 require 'vnews/sql'
 require 'yaml'
+require 'thread_pool'
 
 class Vnews
   def self.sql_client
@@ -85,13 +86,13 @@ class Vnews
       puts "Adding feeds: #{(new_feeds - old_feeds).inspect}"
       puts "Adding folder-feed associations: #{(ff - old_ff).inspect}"
       feeds2 = []
-      threads = []
+      pool = ThreadPool.new(10)
+      puts "Using thread pool size of 10"
       ff.each do |feed_url, folder|
-        threads << Thread.new do 
+        pool.process do 
           feeds2 << Vnews::Feed.fetch_feed(feed_url, folder)
         end
       end
-      threads.each {|t| t.join}
       feeds2.each do |x|
         feed_url, f, folder = *x
         folder ||= "Misc"
