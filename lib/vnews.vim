@@ -82,6 +82,9 @@ function! s:create_list_window()
   nnoremap <silent> <buffer> <leader>k :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
   command! -bar -nargs=0 -range VNConcat :<line1>,<line2>call s:cat_items()
+  nnoremap <silent> <buffer> <leader>x :%VNConcat<CR>
+
+
   call s:common_mappings()
   if !exists("g:VnewsStarredColor")
     let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"
