@@ -291,7 +291,7 @@ This assumes that you installed Vnews through RVM and on Ruby 1.9.2.
 
 ## Reloading your item list
 
-* `,r` and `r` reloads the item list
+* `,r` or `r` reloads the item list
 
 You might want to reload the item list that you're currently viewing
 without fetching updates from over the internet.  There are two reasons
