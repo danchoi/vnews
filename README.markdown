@@ -197,7 +197,9 @@ You can use `:VND` as an abbreviation for `:VNDelete`.
 ## Opening webpages and hyperlinks
 
 * `,o` opens the next web hyperlink on or after the cursor in your default external web browser
-* `,h` opens the web page that the feed item is linked to
+* `,O` opens the web hyperlink under the cursor in a vertical split window
+* `,h` opens the web page that the feed item is linked to in your default external web browser
+* `,H` opens the web page that the feed item is linked in a vertical split window
 
 Web hyperlinks  are the URLs that begin with http:// or https://. 
 
