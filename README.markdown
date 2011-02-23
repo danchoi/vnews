@@ -288,6 +288,7 @@ hour:
 
 This assumes that you installed Vnews through RVM and on Ruby 1.9.2.
 
+
 ## Reloading your item list
 
 * `,r` and `r` reloads the item list
@@ -300,8 +301,8 @@ you may want to do this:
 session started and you want to refresh your view of the items to
 reflect the latest data in MySQL.
 
-* You change the width of the Vim window displaying the item list. Vnews
-can adjust the column widths to fit your new window width if you reload
+* You changed the width of the Vim window displaying the item list. Vnews
+can adjust the column widths in the item list to fit your new window width if you reload
 your item list.
 
 
