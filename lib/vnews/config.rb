@@ -93,6 +93,7 @@ class Vnews
           feeds2 << Vnews::Feed.fetch_feed(feed_url, folder)
         end
       end
+      pool.join
       feeds2.each do |x|
         feed_url, f, folder = *x
         folder ||= "Misc"

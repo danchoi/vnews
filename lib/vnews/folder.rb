@@ -20,6 +20,7 @@ class Vnews
             feeds << Vnews::Feed.fetch_feed(feed, folder)
           end
         end
+        pool.join
         puts "Saving data to database"
         feeds.select {|x| x[1]}.compact.each do |feed_url, f, folder|
           Vnews::Feed.save_feed feed_url, f, folder

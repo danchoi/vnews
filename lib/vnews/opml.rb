@@ -26,6 +26,7 @@ class Vnews
             end
           end
         end
+        pool.join
       end
 
       $stderr.puts "Making database records"
