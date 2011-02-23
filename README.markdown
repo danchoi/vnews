@@ -267,7 +267,7 @@ folder by pressing `u`.
 This cron task will update your feeds every hour, at 1 minute past the
 hour, and log the output to `vnews.log`:
 
-    1 * * * * (bash -l -c 'rvm use 1.9.2 && vnews -u') > /dev/null 2>&1
+    1 * * * * (bash -l -c 'rvm use 1.9.2 && vnews -U') > /dev/null 2>&1
 
 This assumes that you installed Vnews through RVM and on Ruby 1.9.2.
 
