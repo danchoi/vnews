@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'nokogiri'
   s.add_dependency 'mysql2'
-  s.add_dependency 'feed_yamlizer', '>=0.0.9'
+  s.add_dependency 'feed_yamlizer', '>=0.1.0'
 
 end
