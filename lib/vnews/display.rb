@@ -46,7 +46,7 @@ class Vnews
         "no date"
       elsif d.year != Time.now.year
         d.strftime("%b %Y")
-      elsif d.to_date == Time.now.to_date
+      elsif d.to_date >= Time.now.to_date
         d.strftime("%I:%M%P")
       else
         d.strftime("%b %d")
