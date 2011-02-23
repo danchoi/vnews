@@ -8,9 +8,11 @@ MySQL.
 There are lots of newsfeed readers out there, both desktop and
 web-based. Here are some of Vnews's advantages: 
 
-* minimizes distractions; everything is rendered as plain text and pure content; images and ads are not displayed
-* makes it easy to navigate your entire feed collection using efficient keystrokes 
-* makes it easy to copy, append, or pipe text from your feeds to whatever file or program you want
+* Minimizes distractions; everything is rendered as plain text and pure content; images and ads are not displayed
+* Makes it easy to navigate your entire feed collection using efficient keystrokes 
+* Makes it easy to  append or pipe text from your feeds to whatever file or program you want
+* Makes it easy manage your feed subscriptions with a text editor
+* Compared to Google Reader: lets you read your feeds without letting Google collect tons more data about you 
 
 Vnews uses MySQL to store your feed data locally. It uses MySQL's MyISAM
 tables to provide natural-language full-text search capability.
