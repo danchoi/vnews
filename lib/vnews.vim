@@ -77,6 +77,8 @@ function! s:create_list_window()
   nnoremap <silent> <buffer> l :call <SID>show_item_under_cursor(1)<CR>:wincmd p<CR>
   nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
+  nnoremap <silent> <buffer> <leader>j :call <SID>show_adjacent_item(0, 'list-window')<CR> 
+  nnoremap <silent> <buffer> <leader>k :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
   command! -bar -nargs=0 -range VNConcat :<line1>,<line2>call s:cat_items()
   call s:common_mappings()
