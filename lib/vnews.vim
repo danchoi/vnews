@@ -419,7 +419,7 @@ func! s:cat_items() range
   silent normal 1Gjk
   setlocal nomodifiable
   redraw
-  echom "Concatenated ".len(items)."item".(len(items) == 1 ? '' : 's')
+  echom "Concatenated ".len(items)." item".(len(items) == 1 ? '' : 's')
 endfunc
 
 
