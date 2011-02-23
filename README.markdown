@@ -134,7 +134,7 @@ in one consolidated list.
 * `SPACE` toggles full-screen mode for the current window.
 * `C-j` shows the next item without changing window focus
 * `C-k` shows the previous item without changing window focus
-* `q` closes the item window (and reopens the item list window if necessary)
+* `q` from the item window closes it (and reopens the item list window if necessary)
 
 You can also use the standard Vim window switching, rotating, and
 positioning commands.
