@@ -107,8 +107,8 @@ function! s:create_item_window()
   call s:common_mappings()
 
   " for netrw vertical split
-  nnoremap ,O :exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
-  nnoremap ,H :normal Ckk<CR>:exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
+  nnoremap <buffer> <leader>O :exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
+  nnoremap <buffer> <leader>H :normal Ckk<CR>:exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
   close
 endfunction
 
