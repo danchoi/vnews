@@ -9,6 +9,7 @@ let g:VnewsLoaded = 1
 
 let mapleader = ','
 highlight VnewsSearchTerm ctermbg=green guibg=green
+let s:http_link_pattern = 'https\?:[^ >)\]]\+'
 
 
 let s:client_script = 'vnews-client '
@@ -267,6 +268,8 @@ func! s:show_item_under_cursor(inc_read_count)
   silent 1delete
   silent normal 1Gjk
   set nomodifiable
+  syntax clear
+  exe "syn match Constant /". s:http_link_pattern . "/"
 endfunc
 
 " from message window
@@ -318,10 +321,9 @@ func! s:toggle_maximize_window()
 endfunc
 
 "------------------------------------------------------------------------
-let s:http_link_pattern = 'https\?:[^ >)\]]\+'
 
 func! s:open_href_under_cursor()
-  let href = expand("<cWORD>") 
+  let href = matchstr(expand("<cWORD>") , s:http_link_pattern)
   let command = g:Vnews#browser_command . " '" . href . "' "
   call system(command)
   echom command 
