@@ -255,12 +255,10 @@ like so:
     #!/bin/bash
     lpr -o cpi=12 -o lpi=8 -o page-right=36 -o page-left=42 -o page-top=36 -o page-bottom=48 $1
 
-put it on your PATH. Then you could run
+Put this on your PATH. Then you can run this to print your concatenated
+view:
 
     :w !lprcustom
-
-
-
 
 
 ## Updating your feeds
@@ -289,6 +287,23 @@ hour:
     1 * * * * (bash -l -c 'rvm use 1.9.2 && vnews -U') > /dev/null 2>&1
 
 This assumes that you installed Vnews through RVM and on Ruby 1.9.2.
+
+## Reloading your item list
+
+* `,r` and `r` reloads the item list
+
+You might want to reload the item list that you're currently viewing
+without fetching updates from over the internet.  There are two reasons
+you may want to do this:
+
+* You updated your feeds in a background process since your Vnews
+session started and you want to refresh your view of the items to
+reflect the latest data in MySQL.
+
+* You change the width of the Vim window displaying the item list. Vnews
+can adjust the column widths to fit your new window width if you reload
+your item list.
+
 
 
 ## OPML import

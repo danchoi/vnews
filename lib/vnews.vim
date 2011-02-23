@@ -26,9 +26,15 @@ let s:cat_items_command = s:client_script . 'cat_items '
 
 let s:folder = "All"
 let s:feed = "All"
-function! VnewsStatusLine()
+
+func! s:get_selection_name()
   let end_index = match(s:last_selection, '(\d\+)$')
   let selection = s:last_selection[0:end_index-1]
+  return selection
+endfunc
+
+function! VnewsStatusLine()
+  let selection = s:get_selection_name()
   return "%<%f\ " . s:selectiontype . " " . selection . "%r%=%-14.(%l,%c%V%)\ %P"
 endfunction
 
@@ -49,6 +55,8 @@ function! s:common_mappings()
   nnoremap <buffer> <leader>3 :call <SID>delete_item()<CR>
   nnoremap <buffer> u :call <SID>update_feed()<CR>
   nnoremap <buffer> <leader>u :call <SID>update_feed()<CR>
+  nnoremap <buffer> r :call <SID>reload_feed()<CR>
+  nnoremap <buffer> <leader>r :call <SID>reload_feed()<CR>
   nnoremap <silent> <leader>? :call <SID>show_help()<cr>
   command! -bar -nargs=0 VNUpdateFeed  :call <SID>update_feed()
   command! -bar -nargs=1 VNSearch :call s:search_items(<f-args>)
@@ -475,8 +483,14 @@ func! s:update_feed()
   end
   redraw!
   normal G
-  call s:show_item_under_cursor(0)
+endfunc
+
+func! s:reload_feed()
+  if exists("s:last_selection")
+    call s:fetch_items(s:last_selection)
+  end
   redraw!
+  echom "Reloaded ". s:get_selection_name()
 endfunc
 
 
