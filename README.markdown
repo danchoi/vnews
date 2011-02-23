@@ -233,7 +233,7 @@ Search results are sorted by publication date.
 
 * `:VNConcat` with a visual selection
 * `:[range]VNConcat`
-* `,x` is a short for `:%VNConcat` (concatenate all the items in the list)
+* `,x` is a shortcut for `:%VNConcat` (concatenate all the items in the list)
 
 These commands let you concatenate feed items into a single, continuous
 text document for printing or more leisurely reading.
