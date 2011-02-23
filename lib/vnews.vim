@@ -84,7 +84,6 @@ function! s:create_list_window()
   command! -bar -nargs=0 -range VNConcat :<line1>,<line2>call s:cat_items()
   nnoremap <silent> <buffer> <leader>x :%VNConcat<CR>
 
-
   call s:common_mappings()
   if !exists("g:VnewsStarredColor")
     let g:VnewsStarredColor = "ctermfg=green guifg=green guibg=grey"

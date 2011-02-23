@@ -88,6 +88,7 @@ class Vnews
       feeds2 = []
       pool = ThreadPool.new(10)
       puts "Using thread pool size of 10"
+      # TODO sometimes feeds are downloaded twice;
       ff.each do |feed_url, folder|
         pool.process do 
           feeds2 << Vnews::Feed.fetch_feed(feed_url, folder)
