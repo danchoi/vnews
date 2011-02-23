@@ -130,7 +130,7 @@ in one consolidated list.
 * `k` moves down the item list
 * `ENTER` from the list window displays the item under the cursor and focuses the item window
 * `ENTER` from item window returns focus to the list window
-* `C-l` displays the item under the cursor without focusing the item window
+* `C-l` and `l` display the item under the cursor without focusing the item window
 * `SPACE` toggles full-screen mode for the current window.
 * `C-j` shows the next item without changing window focus
 * `C-k` shows the previous item without changing window focus

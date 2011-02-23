@@ -74,6 +74,7 @@ function! s:create_list_window()
   setlocal statusline=%!VnewsStatusLine()
   nnoremap <silent> <buffer> <cr> :call <SID>show_item_under_cursor(1)<CR>
   nnoremap <silent> <buffer> <c-l> :call <SID>show_item_under_cursor(1)<CR>:wincmd p<CR>
+  nnoremap <silent> <buffer> l :call <SID>show_item_under_cursor(1)<CR>:wincmd p<CR>
   nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, 'list-window')<CR> 
   nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, 'list-window')<CR> 
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
