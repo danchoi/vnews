@@ -245,9 +245,21 @@ current feed, type `:%VNConcat`.
 
 See `:help 10.3` to learn how to specify command line ranges.
 
-You can pipe out the output of `:VNConcat` to `a2ps` for printing:
+You can pipe out the output of `:VNConcat` to `lpr` for printing:
 
-    :w !a2ps
+    :w !lpr -o cpi=12 -o lpi=8 -o page-right=36 -o page-left=42 -o page-top=36 -o page-bottom=48 
+
+Of course, it would save you typing to make a custom `lprcustom` script
+like so:
+
+    #!/bin/bash
+    lpr -o cpi=12 -o lpi=8 -o page-right=36 -o page-left=42 -o page-top=36 -o page-bottom=48 $1
+
+put it on your PATH. Then you could run
+
+    :w !lprcustom
+
+
 
 
 
