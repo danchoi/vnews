@@ -235,7 +235,13 @@ Search results are sorted by publication date.
 These commands let you concatenate feed items into a single, continuous
 text document for printing or more leisurely reading.
 
+So for example, if you want to concatenate all the items listed for the
+current feed, type `:%VNConcat`.
+
+`:VNC` is the abbreviation for this command.
+
 See `:help 10.3` to learn how to specify command line ranges.
+
 
 
 ## Updating your feeds
