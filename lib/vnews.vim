@@ -97,6 +97,8 @@ function! s:create_item_window()
   nnoremap <silent> <buffer> <cr> <C-W>=<C-W>p
   nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
+  nnoremap <silent> <buffer> <leader>j :call <SID>show_adjacent_item(0, 'item-window')<CR> 
+  nnoremap <silent> <buffer> <leader>k :call <SID>show_adjacent_item(1, 'item-window')<CR> 
   nnoremap <silent> <buffer> q :call <SID>close_item_window()<cr> 
   nnoremap <buffer> <leader>o :call <SID>find_next_href_and_open()<CR>
   " opens the linked item
