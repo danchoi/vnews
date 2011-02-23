@@ -219,10 +219,13 @@ session using `elinks` or whatever browser you set as your
 
 * `:VNSearch [term]` searches your feeds for items matching `[term]`
 
-
 You can use the abbreviation `:VNS`. If there are matches, you'll see
 the matching words color-highlighted. 
 
+You'll also see the match score in the column to the right of the title column.
+The higher the number, the more relevant the match.
+
+Search results are sorted by publication date.
 
 ## Concatenating feed items
 
