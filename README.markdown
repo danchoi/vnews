@@ -261,6 +261,17 @@ background using `cron`.
 If you're already in a Vnews session, you can update the current feed of
 folder by pressing `u`. 
 
+
+## Updating your feeds with cron
+
+This cron task will update your feeds every hour, at 1 minute past the
+hour, and log the output to `vnews.log`:
+
+    1 * * * * (bash -l -c 'rvm use 1.9.2 && vnews -u') > /dev/null 2>&1
+
+This assumes that you installed Vnews through RVM and on Ruby 1.9.2.
+
+
 ## OPML import
 
 If you want to import an OPML export of your feed subscriptions into
@@ -270,9 +281,9 @@ Vnews, use this command:
 
 `[file]` is your OPML file. 
 
-You can easily import your Google Reader subscriptions this way. 
-Here's [a video][export-tutorial] that shows you how to export your Google Reader
-subscriptions to an OPML file.
+You can easily import your Google Reader subscriptions this way.  Here's
+[a video][export-tutorial] that shows you how to export your Google
+Reader subscriptions to an OPML file.
 
 [export-tutorial]:http://www.clipotech.com/2007/06/opml-export-in-google-reader.html
 
