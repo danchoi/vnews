@@ -137,7 +137,7 @@ class Vnews
               when 'Starred' 
                 "SELECT items.title, items.guid, items.feed, 
                 items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
-                      where items.starred = true order by items.pub_date asc"
+                      where items.starred = true order by items.starred_at, items.pub_date asc"
               when 'All' 
                 "SELECT items.title, items.guid, items.feed, 
                 items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
@@ -168,7 +168,7 @@ class Vnews
     end
 
     def star_item(guid, star=true)
-      @client.query "UPDATE items set starred = #{star} where guid = '#{e guid}'"
+      @client.query "UPDATE items set starred = #{star}, starred_at = now() where guid = '#{e guid}'"
     end
 
     def delete_item(guid)
