@@ -20,7 +20,7 @@ Vnews is free and open-source.
 ## Prerequisites
 
 * a recent version of Vim (Vnews is developed against Vim 7.2)
-* a recent version of Ruby: Ruby 1.9.2 is recommended
+* Ruby 1.9: Ruby 1.9.2 is recommended
 * MySQL
 * the Unix program `tidy` 
 * the Unix program `fmt` 
