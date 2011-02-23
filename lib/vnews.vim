@@ -105,7 +105,8 @@ function! s:create_item_window()
   setlocal modifiable 
   setlocal buftype=nofile
   let s:itembufnr = bufnr('%')
-  nnoremap <silent> <buffer> <cr> <C-W>=<C-W>p
+  "nnoremap <silent> <buffer> <cr> <C-W>=<C-W>p
+  nnoremap <silent> <buffer> <cr> :call <SID>split_and_focus_list_window()<CR>
   nnoremap <silent> <buffer> <c-j> :call <SID>show_adjacent_item(0, "item-window")<CR> 
   nnoremap <silent> <buffer> <c-k> :call <SID>show_adjacent_item(1, "item-window")<CR> 
   nnoremap <silent> <buffer> <leader>j :call <SID>show_adjacent_item(0, 'item-window')<CR> 
@@ -332,6 +333,11 @@ func! s:toggle_maximize_window()
     call s:focus_window(s:listbufnr)
     wincmd p
   endif
+endfunc
+
+" called from item window
+func! s:split_and_focus_list_window()
+  call s:focus_window(s:listbufnr)
 endfunc
 
 "------------------------------------------------------------------------
