@@ -65,7 +65,12 @@ class Vnews
     def format_item_summary(i, width)
       varwidth = width.to_i - 35
       feed_title = col i['feed_title'], varwidth * 0.25
-      title = col i['title'], varwidth * 0.75
+      title = if i['score'] # search result 
+                width = varwidth * 0.75
+                "#{col(i['title'], (width - 6))} | #{"%.3s" % i['score']}"
+              else
+                col i['title'], varwidth * 0.75
+              end
       word_count = i['word_count'].to_s.rjust(6)
       date = format_date(i['pub_date']).rjust(8) 
       spacer = " " * 20 # to push guid all the way off screen

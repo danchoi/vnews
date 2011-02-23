@@ -431,7 +431,6 @@ func! s:search_items(term)
   let res = system(command)
   call s:display_items(res)
   " show item for top match
-  normal gg
   call s:show_item_under_cursor(0)
   " item window will be focused
   call clearmatches()
