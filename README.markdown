@@ -1,7 +1,6 @@
 # Vnews
 
-Vnews is a fast, lightweight newsfeed reader built on top of Vim and
-MySQL.
+Vnews is a newsfeed reader built on top of Vim and MySQL.
 
 [screenshots]
 
