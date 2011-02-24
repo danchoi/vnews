@@ -1,6 +1,8 @@
 require 'vnews/sql'
 require 'yaml'
 require 'thread_pool'
+require 'vnews/constants'
+require 'timeout'
 
 class Vnews
   def self.sql_client
@@ -86,12 +88,18 @@ class Vnews
       puts "Adding feeds: #{(new_feeds - old_feeds).inspect}"
       puts "Adding folder-feed associations: #{(ff - old_ff).inspect}"
       feeds2 = []
-      pool = ThreadPool.new(10)
+      pool = ThreadPool.new Vnews::POOLSIZE
       puts "Using thread pool size of 10"
       # TODO sometimes feeds are downloaded twice;
       ff.each do |feed_url, folder|
         pool.process do 
-          feeds2 << Vnews::Feed.fetch_feed(feed_url, folder)
+          begin
+            Timeout::timeout(Vnews::TIMEOUT) do
+              feeds2 << Vnews::Feed.fetch_feed(feed_url, folder)
+            end
+          rescue Timeout::Error
+            puts "TIMEOUT ERROR: #{feed_url}"
+          end
         end
       end
       pool.join

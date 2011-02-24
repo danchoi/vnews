@@ -1,5 +1,6 @@
 require 'vnews/feed'
 require 'thread_pool'
+require 'vnews/constants'
 
 class Vnews
   class Folder
@@ -12,12 +13,17 @@ class Vnews
         folder = Vnews::Display.strip_item_count(folder)
         puts "Updating folder: #{folder.inspect}"
         feeds = []
-        pool = ThreadPool.new(10)
-        puts "Using thread pool size of 10"
+        pool = ThreadPool.new Vnews::POOLSIZE
+        puts "Using thread pool size of #{Vnews::POOLSIZE}"
         Vnews.sql_client.feeds_in_folder(folder.strip).each do |feed|
           pool.process do 
-            sleep(rand(10))
-            feeds << Vnews::Feed.fetch_feed(feed, folder)
+            begin
+              Timeout::timeout(Vnews::TIMEOUT) do 
+                feeds << Vnews::Feed.fetch_feed(feed, folder)
+              end
+            rescue Timeout::Error
+              puts "TIMEOUT ERROR: #{feed_url}"
+            end
           end
         end
         pool.join
