@@ -91,6 +91,8 @@ function! s:create_list_window()
   command! -bar -nargs=0 -range VNDelete :<line1>,<line2>call s:delete_item()
   command! -bar -nargs=0 -range VNConcat :<line1>,<line2>call s:cat_items()
   nnoremap <silent> <buffer> <leader>x :%VNConcat<CR>
+  nnoremap <buffer> <leader>h :call <SID>show_item_under_cursor(1)<CR>:normal Gk<CR>:call <SID>find_next_href_and_open()<CR>:wincmd p<CR>
+  nnoremap <buffer> <leader>H :call <SID>show_item_under_cursor(1)<CR>:normal Gk<CR>:exec "silent botright vsplit ". matchstr(expand("<cWORD>"), 'https\?:[^ >)\]]\+')<cr>
 
   call s:common_mappings()
   if !exists("g:VnewsStarredColor")
