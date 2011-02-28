@@ -11,7 +11,7 @@ class Vnews
     def self.create_db(config)
       config = symbolize_config(config)
       create_sql = File.join(File.dirname(__FILE__), '..', 'create.sql')
-      passwordarg = config[:password] ? ("-p #{shell_escape(config[:password])}") : ''
+      passwordarg = config[:password] ? ("-p '#{shell_escape(config[:password])}'") : ''
       puts `mysqladmin -h #{shell_escape config[:host]} -u #{shell_escape config[:username]} #{passwordarg} create #{shell_escape config[:database]}`
       puts `mysql -h #{shell_escape config[:host]} -D #{shell_escape config[:database]} -u #{shell_escape config[:username]} #{passwordarg} < #{create_sql}`
     end
