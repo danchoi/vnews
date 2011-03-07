@@ -273,18 +273,18 @@ func! s:show_item_under_cursor(inc_read_count)
     return
   end
   " mark as read
-  set modifiable
+  setlocal modifiable
   let newline = substitute(getline('.'), '^+', ' ', '')
   call setline(line('.'), newline)
-  set nomodifiable
+  setlocal nomodifiable
   let res = system(s:show_item_command . shellescape( s:guid) . ' '. ( a:inc_read_count ? "1" : "" ) )
   call s:focus_window(s:itembufnr)
-  set modifiable
+  setlocal modifiable
   silent 1,$delete
   silent put =res
   silent 1delete
   silent normal 1Gjk
-  set nomodifiable
+  setlocal nomodifiable
   syntax clear
   exe "syn match Constant /". s:http_link_pattern . "/"
 endfunc
