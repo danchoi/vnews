@@ -1,6 +1,5 @@
 require 'vnews/sql'
 require 'yaml'
-require 'thread_pool'
 require 'vnews/constants'
 require 'timeout'
 
@@ -87,29 +86,19 @@ class Vnews
 
       puts "Adding feeds: #{(new_feeds - old_feeds).inspect}"
       puts "Adding folder-feed associations: #{(ff - old_ff).inspect}"
-      feeds2 = []
-      pool = ThreadPool.new Vnews::POOLSIZE
-      puts "Using thread pool size of 10"
-      # TODO sometimes feeds are downloaded twice;
       ff.each do |feed_url, folder|
-        pool.process do 
-          begin
-            Timeout::timeout(Vnews::TIMEOUT) do
-              feeds2 << Vnews::Feed.fetch_feed(feed_url, folder)
+        begin
+          Timeout::timeout(Vnews::TIMEOUT) do
+            feed_url, f, folder = *Vnews::Feed.fetch_feed(feed_url, folder)
+            folder ||= "Misc"
+            if f.nil?
+              $stderr.print "\nNo feed found for #{feed_url}\n"
+            else
+              Vnews::Feed.save_feed(feed_url, f, folder)
             end
-          rescue Timeout::Error
-            puts "TIMEOUT ERROR: #{feed_url}"
           end
-        end
-      end
-      pool.join
-      feeds2.each do |x|
-        feed_url, f, folder = *x
-        folder ||= "Misc"
-        if f.nil?
-          $stderr.print "\nNo feed found for #{feed_url}\n"
-        else
-          Vnews::Feed.save_feed(feed_url, f, folder)
+        rescue Timeout::Error
+          puts "TIMEOUT ERROR: #{feed_url}"
         end
       end
       $stderr.puts "\nDone."

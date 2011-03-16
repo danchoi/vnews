@@ -48,6 +48,7 @@ class Vnews
         Vnews.sql_client.insert_item item.merge(:feed => feed_url, :feed_title => f[:meta][:title])
         $stderr.print "."
       end
+      print "\n"
     rescue
       puts "ERROR: dump: #{feed_url.inspect}, #{folder.inspect}: #{f.inspect} "
       raise
