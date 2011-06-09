@@ -139,7 +139,7 @@ class Vnews
               when 'All' 
                 "SELECT items.title, items.guid, items.feed, 
                 items.feed_title, items.pub_date, items.word_count, items.starred, items.unread from items 
-                      order by items.pub_date asc limit 10000"
+                      order by items.pub_date asc"
               else 
                 # update last_viewed_at 
                 @client.query "UPDATE feeds_folders SET last_viewed_at = now() where folder = '#{e folder}'"

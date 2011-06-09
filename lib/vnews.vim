@@ -1,5 +1,5 @@
 " Vim script that turns Vim into a feed reader
-" Maintainer:	Daniel Choi <dhchoi@gnews.com>
+" Maintainer:	Daniel Choi <dhchoi@gmail.com>
 " License: MIT License (c) 2011 Daniel Choi
 
 if exists("g:VnewsLoaded") || &cp || version < 700
