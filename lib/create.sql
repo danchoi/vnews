@@ -5,7 +5,7 @@ create table feeds (
   num_items_read int default 0, /*a counter of the number of items read from this feed*/
   last_viewed_at datetime, 
   primary key (feed_url)
-) type=MyISAM;
+) engine=MyISAM default charset=latin1;
 
 create table items (
   guid varchar(255),
@@ -22,7 +22,7 @@ create table items (
   starred_at datetime,
   primary key (feed,guid),
   fulltext (title, text)
-) type=MyISAM;
+) engine=MyISAM default charset=latin1;
 
 alter table items add index feed (feed(5));
 
@@ -31,7 +31,7 @@ create table feeds_folders (
   folder varchar(255), /* folder title */
   last_viewed_at datetime, 
   unique key (feed, folder)
-) type=MyISAM;
+) engine=MyISAM default charset=latin1;
 
 alter table feeds_folders add index folder (folder(5));
 
