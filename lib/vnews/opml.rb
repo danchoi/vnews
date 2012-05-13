@@ -12,28 +12,23 @@ class Vnews
       doc = Nokogiri::XML.parse(opml) 
       feeds = []
       doc.xpath('/opml/body/outline').each_slice(CONCURRENCY) do |xs|
-        pool = ThreadPool.new Vnews::POOLSIZE
-        puts "Using thread pool size of #{Vnews::POOLSIZE}"
         xs.each do |n|
-          pool.process do 
-            begin
-              Timeout::timeout(Vnews::TIMEOUT) do 
-                if n.attributes['xmlUrl']
-                  feeds << Vnews::Feed.fetch_feed(n.attributes['xmlUrl'].to_s)
-                else
-                  folder = n.attributes["title"].to_s
-                  $stderr.print "Found folder: #{folder}\n"
-                  n.xpath("outline[@xmlUrl]").each do |m|
-                    feeds << Vnews::Feed.fetch_feed(m.attributes['xmlUrl'].to_s, folder)
-                  end
+          begin
+            Timeout::timeout(Vnews::TIMEOUT) do 
+              if n.attributes['xmlUrl']
+                feeds << Vnews::Feed.fetch_feed(n.attributes['xmlUrl'].to_s)
+              else
+                folder = n.attributes["title"].to_s
+                $stderr.print "Found folder: #{folder}\n"
+                n.xpath("outline[@xmlUrl]").each do |m|
+                  feeds << Vnews::Feed.fetch_feed(m.attributes['xmlUrl'].to_s, folder)
                 end
               end
-            rescue Timeout::Error
-              puts "TIMEOUT ERROR: #{feed_url}"
             end
+          rescue Timeout::Error
+            puts "TIMEOUT ERROR: #{feed_url}"
           end
         end
-        pool.join
       end
 
       $stderr.puts "Making database records"
